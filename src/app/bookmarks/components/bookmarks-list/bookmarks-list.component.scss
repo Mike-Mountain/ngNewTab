@@ -1,0 +1,56 @@
+@import "../../../../styles/partials/variables";
+
+.bookmarks {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.bookmark {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.mat-card {
+  min-width: 30%;
+  max-width: 30%;
+  margin: 1rem auto;
+  &:hover {
+    cursor: pointer;
+    box-shadow: 1px 1px 3px rgba($primary, 0.6), 0 0 1px rgba($primary, 0.6);
+  }
+}
+
+.delete-button {
+  position: absolute;
+  top: -.5rem;
+  right: -.5rem;
+  width: 25px;
+  height: 25px;
+  line-height: 14px;
+  font-size: 14px;
+
+  &::ng-deep .mat-button-wrapper{
+    line-height: 16px;
+    padding: 0;
+
+    .mat-icon {
+      font-size: 18px;
+      padding-right: .01rem;
+      padding-top: 3px;
+    }
+  }
+}
+
+.disabled-overlay {
+  position: absolute;
+  top: -1rem;
+  left: .1rem;
+  width: 100%;
+  Height: 82vh;
+  //background-color: rgba(0, 0, 0, 0.2);
+  z-index: 99999;
+}

@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "ChromeNewTab",
+  "description": "Chrome new tab page",
+  "version": "1.0",
+  "browser_action": {
+    "default_title": "welcome!"
+  },
+  "chrome_url_overrides" : {
+    "newtab": "index.html"
+  },
+  "permissions": ["activeTab", "tabs"],
+  "web_accessible_resources": [
+    "assets/css/*",
+    "assets/js/*",
+    "assets/fonts/*"
+  ]
+}

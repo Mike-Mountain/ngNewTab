@@ -1,0 +1,48 @@
+<app-spinner [loading]="sharedService.isLoading | async">
+  <div class="d-flex justify-content-center">
+    <div class="mx-auto mt-10 px-5 py-2 border">
+      <h2 class="text-center">Login</h2>
+      <hr class="w-75">
+      <form [formGroup]="loginForm" (ngSubmit)="logIn()">
+        <div class="d-flex flex-column">
+
+          <mat-form-field class="mt-5">
+            <input matInput placeholder="Email Address" formControlName="email">
+            <mat-icon matSuffix color="primary" size="small">mail_outline</mat-icon>
+            <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
+              Please enter an email address
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Password" formControlName="password"
+                   [type]="showPassword ? 'text' : 'password'">
+            <mat-icon matSuffix
+                      color="primary"
+                      size="small"
+                      class="passButton"
+                      (click)="showPassword = !showPassword">
+              {{showPassword ? 'visibility' : 'visibility_off'}}
+            </mat-icon>
+            <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
+              Please enter a password
+            </mat-error>
+          </mat-form-field>
+
+          <br>
+
+          <button mat-raised-button
+                  color="primary"
+                  class="w-75 m-auto"
+                  [disabled]="loginForm.controls['email'].hasError('required') || loginForm.controls['password'].hasError('required')"
+                  type="submit">
+            Login
+          </button>
+
+          <a class="text-info text-center mt-3">Forgot your password?</a>
+          <a class="text-info text-center mt-3" routerLink="/user/register">Don't have an account yet?</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</app-spinner>

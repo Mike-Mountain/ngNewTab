@@ -1,0 +1,34 @@
+<section class="todo">
+  <div class="disabled-overlay"
+       *ngIf="sharedService.currentApp !== 'ToDo'"
+       (mouseenter)="sharedService.currentApp = 'ToDo'"
+  ></div>
+  <div class="todo-list">
+    <ng-container *ngIf="tasksService.tasks | async as tasks; else noTasks">
+      <ng-container *ngFor="let task of tasks">
+        <div class="box" [class.completed]="task.complete">
+          <h4>{{task.title}}</h4>
+          <div class="icons">
+            <ng-container *ngIf="!task.complete">
+              <mat-icon class="complete mr-1" (click)="updateTask(task, 'complete')" matTooltip="Complete Task">
+                check_circle_outline
+              </mat-icon>
+            </ng-container>
+            <ng-container *ngIf="task.complete">
+              <mat-icon class="undo-complete mr-1" (click)="updateTask(task, 'todo')" matTooltip="Undo">
+                undo
+              </mat-icon>
+            </ng-container>
+            <mat-icon class="delete" (click)="deleteTask(task)" matTooltip="Delete">
+              highlight_off
+            </mat-icon>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</section>
+
+<ng-template #noTasks>
+  <p class="text-light">Well done! No more tasks left to complete!</p>
+</ng-template>

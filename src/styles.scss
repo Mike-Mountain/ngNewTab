@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+@import "styles/partials/variables";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/utilities";
+@import "styles/partials/reset";
+@import "styles/partials/theme";
+@import "styles/partials/utilities-extended";
+@import "styles/partials/mxins";
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

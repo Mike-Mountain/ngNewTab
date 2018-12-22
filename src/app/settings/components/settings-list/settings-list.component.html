@@ -1,0 +1,53 @@
+<section class="settings">
+  <div class="w-30">
+    <mat-card>
+      <mat-card-content>
+        <h2 class="text-center">Settings:</h2>
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <h3>App Settings</h3>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="mat-expansion-panel-content">
+              <button mat-raised-button color="accent">Notes Settings</button>
+              <button mat-raised-button class="my-3" color="accent">To Do Settings</button>
+              <button mat-raised-button color="accent">Bookmarks Settings</button>
+            </div>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <h3>Account Settings</h3>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="mat-expansion-panel-content">
+              <button mat-raised-button color="accent">Change username</button>
+              <button mat-raised-button class="my-3" color="accent">Change password</button>
+              <button mat-raised-button color="warn">Delete my account</button>
+            </div>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <h3>Privacy Settings</h3>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="mat-expansion-panel-content">
+              <button mat-raised-button color="accent">Privacy Policy</button>
+              <button mat-raised-button class="my-3" color="accent">Manage Permissions</button>
+              <button mat-raised-button color="accent">Download user data</button>
+            </div>
+          </mat-expansion-panel>
+
+          <div class="buttons">
+            <button mat-raised-button color="warn" class="mb-3" (click)="logout()">Logout</button>
+          </div>
+        </mat-accordion>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>

@@ -1,0 +1,15 @@
+<h4 mat-dialog-title class="text-center text-secondary mb-2">Add a new Task</h4>
+<mat-dialog-content>
+  <form [formGroup]="taskForm">
+    <div class="task-form">
+      <mat-form-field>
+        <input matInput required type="text" placeholder="Title" formControlName="title">
+      </mat-form-field>
+    </div>
+  </form>
+  <div class="action-row">
+    <button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="addTask(taskForm.value)">Add</button>
+  </div>
+</mat-dialog-content>
+

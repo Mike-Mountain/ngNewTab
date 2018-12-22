@@ -1,0 +1,78 @@
+@import "../../../../styles/partials/variables";
+
+.todo {
+  position: relative;
+  margin-top: -1rem;
+  padding: .5rem .5rem 0 .5rem;
+}
+
+.disabled-overlay {
+  position: absolute;
+  top: 0;
+  left: .1rem;
+  width: 100%;
+  Height: 82vh;
+  //background-color: rgba(0, 0, 0, 0.2);
+  z-index: 99;
+}
+
+.todo-list {
+  background-color: $accent;
+  border-radius: 6px;
+  margin: auto;
+  padding: .5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  width: 95%;
+  margin: .5rem auto;
+  padding: .5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: darken($accent, 15%);
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6), 0 0 1px rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  background-color: lighten($accent, 20%);
+}
+
+.completed {
+  box-shadow: inset 1px 1px 3px rgba(darken($accent, 20%), 0.6), 0 0 1px rgba(darken($accent, 20%), 0.6);
+  background-color: darken($accent, 5%);
+  color: lighten($accent, 40%);;
+  font-size: 90%;
+}
+
+.icons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  .complete {
+    color: #09C64B;
+    cursor: pointer;
+    &:hover {
+      color: lighten(#09C64B, 7%);
+    }
+  }
+
+  .delete {
+    color: #C60909;
+    cursor: pointer;
+    &:hover {
+      color: lighten(#C60909, 10%);
+    }
+  }
+
+  .undo-complete {
+    color: #0C7CE1;
+    cursor: pointer;
+    &:hover {
+      color: lighten(#0C7CE1, 15%);
+    }
+  }
+}

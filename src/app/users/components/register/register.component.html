@@ -1,0 +1,70 @@
+<app-spinner [loading]="sharedService.isLoading | async">
+  <div class="d-flex justify-content-center">
+    <div class="mx-auto mt-10 px-5 py-2 border">
+      <h2 class="text-center">Register</h2>
+      <hr class="w-75">
+      <form [formGroup]="registerForm" (ngSubmit)="register()">
+        <div class="d-flex flex-column">
+
+          <mat-form-field class="mt-5">
+            <input matInput placeholder="Username" formControlName="username">
+            <mat-icon matSuffix color="primary" size="small">person_outline</mat-icon>
+            <mat-error *ngIf="registerForm.controls['username'].hasError('required')">
+              Please choose a Username
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Email Address" formControlName="emailAddress">
+            <mat-icon matSuffix color="primary" size="small">mail_outline</mat-icon>
+            <mat-error *ngIf="registerForm.controls['emailAddress'].hasError('required')">
+              Please enter an email address
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Password" formControlName="password"
+                   [type]="showPassword ? 'text' : 'password'">
+            <mat-icon matSuffix
+                      color="primary"
+                      size="small"
+                      class="passButton"
+                      (click)="showPassword = !showPassword">
+              {{showPassword ? 'visibility' : 'visibility_off'}}
+            </mat-icon>
+            <mat-error *ngIf="registerForm.controls['password'].hasError('required')">
+              Please enter a password
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Confirm Password" formControlName="confirmPass"
+                   [type]="showConfirmPass ? 'text' : 'password'">
+            <mat-icon matSuffix
+                      color="primary"
+                      size="small"
+                      class="passButton"
+                      (click)="showConfirmPass = !showConfirmPass">
+              {{showConfirmPass ? 'visibility' : 'visibility_off'}}
+            </mat-icon>
+            <mat-error *ngIf="registerForm.controls['confirmPass'].hasError('required')">
+              Please Confirm your password
+            </mat-error>
+          </mat-form-field>
+
+          <br>
+
+          <button mat-raised-button
+                  color="primary"
+                  class="w-75 m-auto"
+                  [disabled]="registerForm.controls['emailAddress'].hasError('required') || registerForm.controls['password'].hasError('required')"
+                  type="submit">
+            Register
+          </button>
+
+          <a class="text-info text-center mt-3" routerLink="/user/login">Already have an account?</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</app-spinner>

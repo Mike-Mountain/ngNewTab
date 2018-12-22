@@ -1,0 +1,71 @@
+@import "../../../../styles/partials/variables";
+
+.w-101 {
+  width: 100.2%
+}
+
+.notes {
+  position: relative;
+  margin-top: -1rem;
+}
+
+.disabled-overlay {
+  position: absolute;
+  top: 0;
+  left: .1rem;
+  width: 100%;
+  Height: 82vh;
+  //background-color: rgba(0, 0, 0, 0.2);
+  z-index: 99999;
+}
+
+.notes-toolbar {
+  background-color: $accent;
+}
+
+.note-body {
+  width: 95%;
+  margin: .5rem auto;
+  min-height: 3rem;
+}
+
+.toolbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-note {
+  color: #C60909;
+  cursor: pointer;
+  &:hover {
+    color: lighten(#C60909, 10%);
+  }
+}
+
+.save-note {
+  color: #09C64B;
+  cursor: pointer;
+  width: 50px;
+  line-height: 20px;
+  font-size: 20px;
+  &:hover {
+    color: lighten(#09C64B, 7%);
+  }
+  &::ng-deep .mat-button-wrapper{
+    line-height: 22px;
+    padding: 0;
+    .mat-icon {
+      font-size: 22px;
+      padding-right: .01rem;
+      padding-top: 3px;
+    }
+  }
+}
+
+.note-action-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}

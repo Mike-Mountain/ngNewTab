@@ -1,0 +1,91 @@
+<section class="top-bar">
+  <div class="settings">
+    <mat-icon color="accent" *ngIf="authService.fireBaseUser | async" (click)="openSettings()">settings</mat-icon>
+  </div>
+  <div class="profile-image">
+    <img src="../../../../assets/images/happy.svg" alt="profile_image" width="75">
+  </div>
+  <div class="general-info">
+    <p>{{currentDate | date:'mediumDate'}}</p>
+    <p>{{currentWeather}}</p>
+  </div>
+</section>
+<ng-container *ngIf="authService.fireBaseUser | async as user; else anon">
+  <div class="user-bar" *ngIf="!(sharedService.isLoading | async)">
+    <h3>Welcome {{user.displayName}}!</h3>
+  </div>
+  <mat-toolbar
+    color="primary"
+    aria-roledescription="navigation"
+    role="navigation"
+    class="d-flex justify-content-center position-relative">
+    <div class="disabled-overlay" *ngIf="sharedService.isSettings"></div>
+    <div class="menu">
+      <a class="menu-item text-light"
+         (click)="changeCurrentApp('Notes')"
+         [class.active]="sharedService.currentApp === 'Notes'"
+      >
+        Notes
+        <span class="ml-2">
+        <button mat-mini-fab color="accent"
+                [disabled]="sharedService.currentApp !== 'Notes'"
+                (click)="addNewNote()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </span>
+      </a>
+      <a class="menu-item text-light"
+         (click)="changeCurrentApp('ToDo')"
+         [class.active]="sharedService.currentApp === 'ToDo'"
+      >
+        To Do
+        <span class="ml-2">
+        <button mat-mini-fab color="accent"
+                [disabled]="sharedService.currentApp !== 'ToDo'"
+                (click)="openTasksModal()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </span>
+      </a>
+      <a class="menu-item text-light"
+         (click)="changeCurrentApp('Bookmarks')"
+         [class.active]="sharedService.currentApp === 'Bookmarks'"
+      >
+        Bookmarks
+        <span class="ml-2">
+        <button mat-mini-fab color="accent"
+                [disabled]="sharedService.currentApp !== 'Bookmarks'"
+                (click)="openBookmarkModal()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </span>
+      </a>
+    </div>
+  </mat-toolbar>
+</ng-container>
+
+
+<ng-template #anon>
+  <div class="user-bar" *ngIf="!(sharedService.isLoading | async)">
+    <div class="buttons">
+      <button mat-button color="primary" size="small" class="button" routerLink="user/register"
+              routerLinkActive="mat-stroked-button">Register
+      </button>
+      <button mat-button color="accent" class="button" routerLink="user/login" routerLinkActive="mat-stroked-button">
+        Login
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #bookmarkForm>
+  <app-new-bookmark [dialogRef]="bookmarkDialogRef"></app-new-bookmark>
+</ng-template>
+
+<ng-template #taskForm>
+  <app-new-task [tasksModalRef]="tasksModalRef"></app-new-task>
+</ng-template>
+
+<!--<ng-template #notesForm>-->
+  <!--<app-new-bookmark [dialogRef]="bookmarkDialogRef"></app-new-bookmark>-->
+<!--</ng-template>-->

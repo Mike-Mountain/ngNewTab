@@ -1,0 +1,21 @@
+<section class="bookmarks">
+  <div class="disabled-overlay"
+       *ngIf="sharedService.currentApp !== 'Bookmarks'"
+       (mouseenter)="sharedService.currentApp = 'Bookmarks'"
+  ></div>
+  <ng-container *ngFor="let bookmark of bookmarkService.bookmarks | async">
+    <mat-card>
+      <mat-card-content>
+        <button mat-mini-fab size="small" color="warn" class="delete-button" (click)="deleteBookmark(bookmark.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <a [href]="bookmark.url" target="_blank">
+          <div class="bookmark" [matTooltip]="bookmark.description + '  | |  ' + bookmark.url">
+            <img [src]="bookmark.faviconUrl" alt="favicon" width="32" height="32">
+            <h3 class="text-dark">{{bookmark.title}}</h3>
+          </div>
+        </a>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+</section>

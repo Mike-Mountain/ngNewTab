@@ -1,0 +1,21 @@
+<h4 mat-dialog-title class="text-center text-secondary mb-2">Add a new Bookmark</h4>
+<mat-dialog-content>
+  <form [formGroup]="bookmarkForm">
+    <div class="bookmark-form">
+      <mat-form-field>
+        <input matInput required type="text" placeholder="Url" formControlName="url">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput required type="text" placeholder="Title" formControlName="title">
+      </mat-form-field>
+      <mat-form-field>
+        <textarea matInput rows="2" type="text" placeholder="Description" formControlName="description"></textarea>
+      </mat-form-field>
+    </div>
+  </form>
+  <div class="action-row">
+    <button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="addBookmark(bookmarkForm.value)">Add</button>
+  </div>
+</mat-dialog-content>
+
