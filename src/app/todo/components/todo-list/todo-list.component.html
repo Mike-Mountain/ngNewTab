@@ -7,7 +7,7 @@
     <ng-container *ngIf="tasksService.tasks | async as tasks; else noTasks">
       <ng-container *ngFor="let task of tasks">
         <div class="box" [class.completed]="task.complete">
-          <h4>{{task.title}}</h4>
+          <a class="detail-view-link" (click)="viewTaskDetail(task)">{{task.title}}</a>
           <div class="icons">
             <ng-container *ngIf="!task.complete">
               <mat-icon class="complete mr-1" (click)="updateTask(task, 'complete')" matTooltip="Complete Task">
@@ -31,4 +31,8 @@
 
 <ng-template #noTasks>
   <p class="text-light">Well done! No more tasks left to complete!</p>
+</ng-template>
+
+<ng-template #taskDetail>
+  <app-task-detail [selectedTask]="selectedTask"></app-task-detail>
 </ng-template>

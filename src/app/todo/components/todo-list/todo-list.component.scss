@@ -38,6 +38,15 @@
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6), 0 0 1px rgba(0, 0, 0, 0.6);
   border-radius: 6px;
   background-color: lighten($accent, 20%);
+  cursor: pointer;
+}
+
+a.detail-view-link {
+  font-size: 16px;
+  font-weight: 600;
+  &:hover {
+    color: darken(#0C7CE1, 10%);
+  }
 }
 
 .completed {

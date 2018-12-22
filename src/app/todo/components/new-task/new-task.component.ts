@@ -20,13 +20,15 @@ export class NewTaskComponent implements OnInit {
 
   ngOnInit() {
     this.taskForm = this.formBuilder.group({
-      title: ['', Validators.required]
+      title: ['', Validators.required],
+      description: [''],
+      dueDate: [new Date()],
     });
   }
 
   addTask(task: Task) {
-    const {title, complete} = task;
-    this.tasksService.addTask({title: title, complete: false})
+    const {title, description, dueDate} = task;
+    this.tasksService.addTask({title: title, description: description, dueDate: dueDate, complete: false})
       .then(() => {
         this.closeDialog();
       })

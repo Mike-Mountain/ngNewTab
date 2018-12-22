@@ -5,11 +5,13 @@ import {MaterialModule} from '../material/material.module';
 import { NewTaskComponent } from './components/new-task/new-task.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
+import { TaskDetailComponent } from './components/task-detail/task-detail.component';
 
 @NgModule({
   declarations: [
     TodoListComponent,
-    NewTaskComponent
+    NewTaskComponent,
+    TaskDetailComponent
   ],
   imports: [
     CommonModule,
