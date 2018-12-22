@@ -1,4 +1,4 @@
-import {firebase} from './firebase.config';
+import {firebase} from './apis.config';
 
 export const environment = {
   production: true,
