@@ -6,7 +6,7 @@ Feel free to fork the project. I won't accept any Pull Requests until I can get 
 planning wiki up. I'm not actually expecting anyone to even see this anyway, never mind make a PR. 
 So if you want to and I'm taking too long, just shout. 
 
-##Usage
+## Usage
 
 This project currently utilises Firebase (and [AngularFire2](https://github.com/angular/angularfire2)) for it's server (Planning on building my own one day). 
 In order to make full use of the app, set up a project on your firebase console, and add the config 
