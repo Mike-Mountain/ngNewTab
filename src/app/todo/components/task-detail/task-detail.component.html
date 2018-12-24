@@ -1,3 +1,32 @@
-<p>
-  task-detail works!
-</p>
+<div class="modal-top" (click)="editTaskTitle = true">
+  <h3 mat-dialog-title *ngIf="!editTaskTitle; else updateTitle">{{selectedTask.title}}</h3>
+  <p matTooltip="Click to edit">{{selectedTask.sid}}</p>
+</div>
+<div class="summary">
+  <h5 *ngIf="!editTaskDescription">Summary:</h5>
+</div>
+<mat-card (click)="editTaskDescription = true">
+  <mat-card-content *ngIf="!editTaskDescription; else updateDescription" matTooltip="Click to edit">
+    {{selectedTask.description}}
+  </mat-card-content>
+</mat-card>
+<div class="buttons">
+  <button mat-raised-button color="warn" class="button-row-button" (click)="deleteTask()">Delete</button>
+  <button mat-raised-button color="accent" class="button-row-button" (click)="updateTaskStatus('active')" *ngIf="!(editTaskTitle || editTaskDescription) && selectedTask.complete === true">Undo complete</button>
+  <button mat-raised-button color="accent" class="button-row-button" (click)="updateTaskStatus('complete')" *ngIf="!(editTaskTitle || editTaskDescription) && selectedTask.complete === false">Complete</button>
+  <button mat-raised-button color="accent" class="button-row-button" (click)="updateTask()" *ngIf="editTaskTitle || editTaskDescription">Update</button>
+  <button mat-raised-button color="warn" class="button-row-button" (click)="editTaskTitle = false; editTaskDescription = false" *ngIf="editTaskTitle || editTaskDescription">Cancel</button>
+  <button mat-raised-button color="primary" class="button-row-button" (click)="closeDialog()">Close</button>
+</div>
+
+<ng-template #updateTitle>
+  <mat-form-field>
+    <input matInput type="text" placeholder="title" [formControl]="taskName">
+  </mat-form-field>
+</ng-template>
+
+<ng-template #updateDescription>
+  <mat-form-field class="w-100">
+    <textarea matInput class="w-100" type="text" rows="8" placeholder="summary" [formControl]="taskDescription"></textarea>
+  </mat-form-field>
+</ng-template>

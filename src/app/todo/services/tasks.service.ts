@@ -11,6 +11,8 @@ export class TasksService {
 
   tasksList: AngularFirestoreCollection<Task>;
   tasks: Observable<Task[]>;
+  sid_int: number;
+  sid_int_comparison: number[];
 
   constructor(private fireStore: AngularFirestore) {
   }
@@ -26,6 +28,14 @@ export class TasksService {
           return {id, ...data};
         });
       }));
+    this.tasks.subscribe(tasks => {
+      const sid_int_compare: number[] = [];
+      tasks.forEach(task => {
+        sid_int_compare.push(+task.sid.slice(3));
+      });
+      sid_int_compare.sort();
+      this.sid_int = sid_int_compare.slice(-1)[0] || 0;
+    });
     return this.tasks;
   }
 
@@ -35,11 +45,15 @@ export class TasksService {
 
   completeTask(task: Task, status: string) {
     status === 'complete' ? task.complete = true : task.complete = false;
+    this.updateTask(task);
+  }
+
+  updateTask(task: Task) {
     const collectionRef = this.fireStore.collection('todo').doc(task.id);
     collectionRef.get().subscribe(todo => {
       todo.ref.update(task)
-        .catch(err => {
-          console.log(err);
+        .catch(error => {
+          console.log(error);
         });
     });
   }

@@ -1,5 +1,6 @@
 export class Task {
   id?: string;
+  sid?: string;
   title: string;
   description?: string;
   dueDate?: Date;
@@ -10,5 +11,6 @@ export class Task {
     this.complete = options && options.complete || false;
     this.description = options && options.description;
     this.dueDate = options && options.dueDate;
+    this.sid = options && options.sid || 'new';
   }
 }

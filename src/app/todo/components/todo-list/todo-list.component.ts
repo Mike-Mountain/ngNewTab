@@ -27,7 +27,10 @@ export class TodoListComponent implements OnInit {
 
   viewTaskDetail(task: Task) {
     this.selectedTask = task;
-    this.taskDetailRef = this.matDialog.open(this.taskDetail);
+    this.taskDetailRef = this.matDialog.open(this.taskDetail, {
+      minWidth: 300,
+      width: '35%'
+    });
   }
 
   updateTask(task: Task, status) {
