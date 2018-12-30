@@ -1,64 +1,55 @@
 import {Injectable} from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection, DocumentReference} from '@angular/fire/firestore';
 import {Note} from '../models/note.model';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {SharedService} from '../../shared/services/shared.service';
-import {map} from 'rxjs/operators';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotesService {
 
-  notesList: AngularFirestoreCollection<Note>;
   notes: Observable<Note[]>;
+
+  notesUrl = 'http://localhost:3000/notes';
+  httpOptions = {
+    headers: new HttpHeaders({'Content-Type': 'application/json'})
+  };
 
   selectedNoteSrc = new BehaviorSubject<Note>(null);
   selectedNoteFromService = this.selectedNoteSrc.asObservable();
+  noteAddedSrc = new BehaviorSubject<boolean>(false);
+  noteAdded = this.noteAddedSrc.asObservable();
 
-  constructor(private fireStore: AngularFirestore,
-              private sharedService: SharedService) {
+  constructor(private sharedService: SharedService,
+              private http: HttpClient) {
   }
 
-  getNotes(): Observable<Note[]> {
-    this.sharedService.isLoadingSrc.next(true);
-    this.notesList = this.fireStore.collection<Note>('notes');
-    this.notes = this.notesList.snapshotChanges()
-    // Get the ID for each note in the list.
-      .pipe(map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return {id, ...data};
-        });
-      }));
-    this.sharedService.isLoadingSrc.next(false);
-    return this.notes;
+  getAllNotes(): Observable<Note[]> {
+    return this.http.get<Note[]>(this.notesUrl);
   }
 
-  addNote(note: Note) {
-    const {title, body, created, modified} = note;
-    this.notesList.add({title, body, created, modified})
-      .then(item => {
-        note.id = item.id;
-        this.selectedNoteSrc.next(note);
-      });
+  getNoteById(id: string): Observable<Note> {
+    const url = `${this.notesUrl}/${id}`;
+    return this.http.get<Note>(url);
   }
 
-  updateNote(note: Note) {
-    const collectionRef = this.fireStore.collection<Note>('notes').doc(note.id);
-    collectionRef.get().subscribe(item => {
-      item.ref.update({title: note.title, id: note.id, body: note.body, created: note.created, modified: note.modified})
-        .catch(err => {
-          console.log(err);
-        });
-    });
+  findOneNote(options: object): Observable<Note> {
+    const url = `${this.notesUrl}/find`;
+    return this.http.get<Note>(url, options);
   }
 
-  deleteNote(id: string) {
-    this.fireStore.collection<Note>('notes').doc(id).delete()
-      .catch(err => {
-        console.log(err);
-      });
+  addNote(note: Note): Observable<Note> {
+    return this.http.post<Note>(this.notesUrl, note, this.httpOptions);
+  }
+
+  updateNote(id: string, note: Note) {
+    const url = `${this.notesUrl}/${id}`;
+    return this.http.patch<Note>(url, note);
+  }
+
+  deleteNote(id: string): Observable<string> {
+    const url = `${this.notesUrl}/${id}`;
+    return this.http.delete<string>(url);
   }
 }

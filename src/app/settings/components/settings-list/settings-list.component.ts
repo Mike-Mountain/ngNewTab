@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../../users/services/auth.service';
 import {Router} from '@angular/router';
 import {SharedService} from '../../../shared/services/shared.service';
+import {UserService} from '../../../users/services/user.service';
 
 @Component({
   selector: 'app-settings-list',
@@ -12,7 +13,8 @@ export class SettingsListComponent implements OnInit {
 
   constructor(public authService: AuthService,
               public sharedService: SharedService,
-              private router: Router) {
+              private router: Router,
+              public userService: UserService) {
   }
 
   ngOnInit() {
@@ -27,6 +29,12 @@ export class SettingsListComponent implements OnInit {
       this.router.navigateByUrl('/user/login').then(() => {
         this.sharedService.isSettings = false;
       });
+    });
+  }
+
+  deleteUser(uid) {
+    this.userService.deleteUser(uid).subscribe(a => {
+      console.log(a);
     });
   }
 

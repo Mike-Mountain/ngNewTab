@@ -3,10 +3,18 @@
        *ngIf="sharedService.currentApp !== 'Bookmarks'"
        (mouseenter)="sharedService.currentApp = 'Bookmarks'"
   ></div>
-  <ng-container *ngFor="let bookmark of bookmarkService.bookmarks | async">
+  <mat-toolbar class="w-101 notes-toolbar">
+    <button mat-button [matMenuTriggerFor]="menu" class="text-light">Bookmarks</button>
+    <button mat-mini-fab color="primary" class="add-new" (click)="openBookmarkModal()">
+      <mat-icon>add</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+    </mat-menu>
+  </mat-toolbar>
+  <ng-container *ngFor="let bookmark of bookmarks">
     <mat-card>
       <mat-card-content>
-        <button mat-mini-fab size="small" color="warn" class="delete-button" (click)="deleteBookmark(bookmark.id)">
+        <button mat-mini-fab size="small" color="warn" class="delete-button" (click)="deleteBookmark(bookmark._id)">
           <mat-icon>delete</mat-icon>
         </button>
         <a [href]="bookmark.url" target="_blank">
@@ -19,3 +27,7 @@
     </mat-card>
   </ng-container>
 </section>
+
+<ng-template #bookmarkForm>
+  <app-new-bookmark [dialogRef]="bookmarkDialogRef" (addedBookmark)="getBookmarks()"></app-new-bookmark>
+</ng-template>

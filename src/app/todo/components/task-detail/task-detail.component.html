@@ -12,7 +12,7 @@
 </mat-card>
 <div class="buttons">
   <button mat-raised-button color="warn" class="button-row-button" (click)="deleteTask()">Delete</button>
-  <button mat-raised-button color="accent" class="button-row-button" (click)="updateTaskStatus('active')" *ngIf="!(editTaskTitle || editTaskDescription) && selectedTask.complete === true">Undo complete</button>
+  <button mat-raised-button color="accent" class="button-row-button" (click)="updateTaskStatus('active')" *ngIf="!(editTaskTitle || editTaskDescription) && selectedTask.complete === true">Undo</button>
   <button mat-raised-button color="accent" class="button-row-button" (click)="updateTaskStatus('complete')" *ngIf="!(editTaskTitle || editTaskDescription) && selectedTask.complete === false">Complete</button>
   <button mat-raised-button color="accent" class="button-row-button" (click)="updateTask()" *ngIf="editTaskTitle || editTaskDescription">Update</button>
   <button mat-raised-button color="warn" class="button-row-button" (click)="editTaskTitle = false; editTaskDescription = false" *ngIf="editTaskTitle || editTaskDescription">Cancel</button>

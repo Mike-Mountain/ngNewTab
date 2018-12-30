@@ -71,9 +71,7 @@
 
 .user-bar {
   width: 50%;
-  height: 3rem;
   margin: auto;
-  box-shadow: 1px 2px 3px rgba($accent, 0.3), 0 0 1px rgba($accent, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -93,4 +91,8 @@
   Height: 100%;
   background-color: rgba(0, 0, 0, 0.2);
   z-index: 99999;
+}
+
+.hidden {
+  visibility: hidden;
 }

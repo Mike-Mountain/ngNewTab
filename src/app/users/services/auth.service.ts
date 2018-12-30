@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {BehaviorSubject} from 'rxjs';
 import {SharedService} from '../../shared/services/shared.service';
+import {UserService} from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,29 +17,34 @@ export class AuthService {
   currentUser: any;
 
   constructor(private auth: AngularFireAuth,
-              private sharedService: SharedService) {
+              private sharedService: SharedService,
+              private userService: UserService) {
     this.sharedService.isLoadingSrc.next(true);
-    auth.authState.subscribe(user => {
-      if (user) {
-        this.fireBaseUserSrc.next(user);
-        this.isLoggedInSrc.next(true);
+    auth.authState.subscribe(authUser => {
+      if (authUser) {
+        this.userService.getUserById(authUser.uid).subscribe(user => {
+          this.fireBaseUserSrc.next(user);
+          this.isLoggedInSrc.next(true);
+        });
       }
       this.sharedService.isLoadingSrc.next(false);
     });
   }
 
-  registerWithEmailAndPAssword(email, password, username): Promise<any> {
+  registerWithEmailAndPassword(email, password, username): Promise<any> {
     this.sharedService.isLoadingSrc.next(true);
     return this.auth.auth.createUserWithEmailAndPassword(email, password)
       .then(() => {
         this.currentUser = this.auth.auth.currentUser;
-        this.currentUser.updateProfile({
-          displayName: username,
-          photoURL: '',
+        this.userService.createUser(this.currentUser.uid, {
+          username: username,
+          email: email,
+          roles: ['User']
+        }).subscribe(user => {
+          this.fireBaseUserSrc.next(user);
+          this.isLoggedInSrc.next(true);
+          this.sharedService.isLoadingSrc.next(false);
         });
-        this.fireBaseUserSrc.next(this.currentUser);
-        this.isLoggedInSrc.next(true);
-        this.sharedService.isLoadingSrc.next(false);
       })
       .catch(err => {
         alert(`ERROR: ${err.code} -> ${err.message}`);
@@ -49,10 +55,12 @@ export class AuthService {
   loginWithEmailAndPassword(email, password): Promise<any> {
     this.sharedService.isLoadingSrc.next(true);
     return this.auth.auth.signInWithEmailAndPassword(email, password)
-      .then(user => {
-        this.fireBaseUserSrc.next(user);
-        this.isLoggedInSrc.next(true);
-        this.sharedService.isLoadingSrc.next(false);
+      .then(authUser => {
+        this.userService.getUserById(authUser.user.uid).subscribe(user => {
+          this.fireBaseUserSrc.next(user);
+          this.isLoggedInSrc.next(true);
+          this.sharedService.isLoadingSrc.next(false);
+        });
       })
       .catch(err => {
         alert(`ERROR: ${err.code} -> ${err.message}`);

@@ -3,8 +3,16 @@
        *ngIf="sharedService.currentApp !== 'ToDo'"
        (mouseenter)="sharedService.currentApp = 'ToDo'"
   ></div>
+  <mat-toolbar class="w-101 notes-toolbar">
+    <button mat-button [matMenuTriggerFor]="menu" class="text-light">Tasks</button>
+    <button mat-mini-fab color="primary" class="add-new" (click)="openTasksModal()">
+      <mat-icon>add</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+    </mat-menu>
+  </mat-toolbar>
   <div class="todo-list">
-    <ng-container *ngIf="tasksService.tasks | async as tasks; else noTasks">
+    <ng-container *ngIf="tasks && tasks.length; else noTasks">
       <ng-container *ngFor="let task of tasks">
         <div class="box" [class.completed]="task.complete">
           <a class="detail-view-link" (click)="viewTaskDetail(task)">{{task.title}}</a>
@@ -34,5 +42,9 @@
 </ng-template>
 
 <ng-template #taskDetail>
-  <app-task-detail [selectedTask]="selectedTask" [dialogRef]="taskDetailRef"></app-task-detail>
+  <app-task-detail [selectedTask]="selectedTask" [dialogRef]="taskDetailRef" (taskDeleted)="rePopulateTasksList()"></app-task-detail>
+</ng-template>
+
+<ng-template #taskForm>
+  <app-new-task [tasksModalRef]="newTaskModalRef" (taskAdded)="rePopulateTasksList()"></app-new-task>
 </ng-template>

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Task} from '../../models/task.model';
 import {FormControl} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
@@ -13,6 +13,7 @@ export class TaskDetailComponent implements OnInit {
 
   @Input() selectedTask: Task;
   @Input() dialogRef: MatDialogRef<any>;
+  @Output() taskDeleted = new EventEmitter();
   taskName: FormControl;
   taskDescription: FormControl;
   editTaskTitle: boolean;
@@ -31,8 +32,10 @@ export class TaskDetailComponent implements OnInit {
   }
 
   deleteTask() {
-    this.tasksService.deleteTask(this.selectedTask.id);
-    this.closeDialog();
+    this.tasksService.deleteTask(this.selectedTask._id).subscribe(value => {
+      this.taskDeleted.emit();
+      this.closeDialog();
+    });
   }
 
   updateTaskStatus(status: string) {
@@ -43,9 +46,10 @@ export class TaskDetailComponent implements OnInit {
   updateTask() {
     this.selectedTask.title = this.taskName.value;
     this.selectedTask.description = this.taskDescription.value;
-    this.tasksService.updateTask(this.selectedTask);
-    this.editTaskTitle = false;
-    this.editTaskDescription = false;
+    this.tasksService.updateTask(this.selectedTask._id, this.selectedTask).subscribe(task => {
+      this.editTaskTitle = false;
+      this.editTaskDescription = false;
+    });
   }
 
 }

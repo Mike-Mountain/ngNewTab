@@ -26,7 +26,9 @@
             <div class="mat-expansion-panel-content">
               <button mat-raised-button color="accent">Change username</button>
               <button mat-raised-button class="my-3" color="accent">Change password</button>
-              <button mat-raised-button color="warn">Delete my account</button>
+              <ng-container *ngIf="authService.fireBaseUser | async as user">
+                <button mat-raised-button color="warn" (click)="deleteUser(user._id)">Delete my account</button>
+              </ng-container>
             </div>
           </mat-expansion-panel>
 

@@ -11,8 +11,15 @@
   </div>
 </section>
 <ng-container *ngIf="authService.fireBaseUser | async as user; else anon">
-  <div class="user-bar" *ngIf="!(sharedService.isLoading | async)">
-    <h3>Welcome {{user.displayName}}!</h3>
+  <div class="user-bar d-flex flex-column align-items-center justify-content-center"
+       *ngIf="!(sharedService.isLoading | async)">
+    <h3 *ngIf="!search" (click)="search = true">Welcome {{user.username}}!</h3>
+    <ng-container *ngIf="search">
+      <div class="w-100">
+        <app-search-bar (closeSearch)="closeSearch($event)"></app-search-bar>
+      </div>
+    </ng-container>
+    <!--<button mat-button class="text-light" (click)="openUsers()">Users</button>-->
   </div>
   <mat-toolbar
     color="primary"
@@ -26,39 +33,39 @@
          [class.active]="sharedService.currentApp === 'Notes'"
       >
         Notes
-        <span class="ml-2">
-        <button mat-mini-fab color="accent"
-                [disabled]="sharedService.currentApp !== 'Notes'"
-                (click)="addNewNote()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </span>
+        <!--<span class="ml-2">-->
+        <!--<button mat-mini-fab color="accent"-->
+        <!--[disabled]="sharedService.currentApp !== 'Notes'"-->
+        <!--(click)="addNewNote()">-->
+        <!--<mat-icon>add</mat-icon>-->
+        <!--</button>-->
+        <!--</span>-->
       </a>
       <a class="menu-item text-light"
          (click)="changeCurrentApp('ToDo')"
          [class.active]="sharedService.currentApp === 'ToDo'"
       >
         To Do
-        <span class="ml-2">
-        <button mat-mini-fab color="accent"
-                [disabled]="sharedService.currentApp !== 'ToDo'"
-                (click)="openTasksModal()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </span>
+        <!--<span class="ml-2">-->
+        <!--<button mat-mini-fab color="accent"-->
+        <!--[disabled]="sharedService.currentApp !== 'ToDo'"-->
+        <!--(click)="openTasksModal()">-->
+        <!--<mat-icon>add</mat-icon>-->
+        <!--</button>-->
+        <!--</span>-->
       </a>
       <a class="menu-item text-light"
          (click)="changeCurrentApp('Bookmarks')"
          [class.active]="sharedService.currentApp === 'Bookmarks'"
       >
         Bookmarks
-        <span class="ml-2">
-        <button mat-mini-fab color="accent"
-                [disabled]="sharedService.currentApp !== 'Bookmarks'"
-                (click)="openBookmarkModal()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </span>
+        <!--<span class="ml-2">-->
+        <!--<button mat-mini-fab color="accent"-->
+        <!--[disabled]="sharedService.currentApp !== 'Bookmarks'"-->
+        <!--(click)="openBookmarkModal()">-->
+        <!--<mat-icon>add</mat-icon>-->
+        <!--</button>-->
+        <!--</span>-->
       </a>
     </div>
   </mat-toolbar>
@@ -77,15 +84,3 @@
     </div>
   </div>
 </ng-template>
-
-<ng-template #bookmarkForm>
-  <app-new-bookmark [dialogRef]="bookmarkDialogRef"></app-new-bookmark>
-</ng-template>
-
-<ng-template #taskForm>
-  <app-new-task [tasksModalRef]="tasksModalRef"></app-new-task>
-</ng-template>
-
-<!--<ng-template #notesForm>-->
-  <!--<app-new-bookmark [dialogRef]="bookmarkDialogRef"></app-new-bookmark>-->
-<!--</ng-template>-->

@@ -3,7 +3,6 @@
 .todo {
   position: relative;
   margin-top: -1rem;
-  padding: .5rem .5rem 0 .5rem;
 }
 
 .disabled-overlay {
@@ -12,19 +11,47 @@
   left: .1rem;
   width: 100%;
   Height: 82vh;
-  //background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.2);
   z-index: 99;
 }
 
 .todo-list {
   background-color: $accent;
   border-radius: 6px;
-  margin: auto;
+  margin: 1rem .5rem;
   padding: .5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.notes-toolbar {
+  background-color: $accent;
+  position: relative;
+}
+
+.add-new  {
+  position: absolute;
+  top: .8rem;
+  right: 1rem;
+  width: 35px;
+  height: 35px;
+  line-height: 16px;
+  font-size: 16px;
+  &:hover {
+    background-color: darken($primary, 5%);
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.8), 0px 6px 10px 0px rgba(0, 0, 0, 0.5), 0px 1px 18px 0px rgba(0, 0, 0, 0.5);
+  }
+  &::ng-deep .mat-button-wrapper{
+    line-height: 18px;
+    padding: 0;
+    .mat-icon {
+      font-size: 22px;
+      padding-right: .08rem;
+      padding-top: 2.5px;
+    }
+  }
 }
 
 .box {

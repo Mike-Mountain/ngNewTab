@@ -4,10 +4,15 @@
        (mouseenter)="sharedService.currentApp = 'Notes'"
   ></div>
   <mat-toolbar class="w-101 notes-toolbar">
-    <button mat-button [matMenuTriggerFor]="menu" class="text-light">Notes</button>
+      <button mat-button [matMenuTriggerFor]="menu" class="text-light">Notes</button>
+      <button mat-mini-fab color="primary" class="add-new" (click)="addNewNote()">
+        <mat-icon>add</mat-icon>
+      </button>
     <mat-menu #menu="matMenu">
-      <ng-container *ngFor="let note of notesService.notes | async">
-        <button mat-menu-item (click)="selectNote(note)">{{note.title}}</button>
+      <ng-container *ngIf="notes && notes.length">
+        <ng-container *ngFor="let note of notes">
+          <button mat-menu-item (click)="selectNote(note)">{{note.title}}</button>
+        </ng-container>
       </ng-container>
     </mat-menu>
   </mat-toolbar>
@@ -22,7 +27,7 @@
               check_circle_outline
             </mat-icon>
           </mat-form-field>
-          <mat-icon class="delete-note" (click)="deleteNote(note.id)">delete</mat-icon>
+          <mat-icon class="delete-note" (click)="deleteNote(note._id)">delete</mat-icon>
         </div>
       </mat-toolbar>
 
@@ -34,8 +39,8 @@
       </div>
       <div class="w-50 ml-auto">
         <div class="note-action-row">
-          <button mat-raised-button color="warn" (click)="deleteNote(note.id)">Discard Note</button>
-          <button mat-raised-button color="accent" (click)="updateNote(note, note.title, body.value)">Save Note</button>
+          <button mat-raised-button color="warn" (click)="deleteNote(note._id)">Discard Note</button>
+          <button mat-raised-button color="accent" (click)="updateNote(note, title.value, body.value)">Save Note</button>
         </div>
       </div>
     </ng-container>

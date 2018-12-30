@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
   register() {
     const {username, emailAddress, password, confirmPass} = this.registerForm.value;
     if (password === confirmPass) {
-      this.authService.registerWithEmailAndPAssword(emailAddress, password, username)
+      this.authService.registerWithEmailAndPassword(emailAddress, password, username)
         .then(() => {
           this.router.navigateByUrl('/');
         });
