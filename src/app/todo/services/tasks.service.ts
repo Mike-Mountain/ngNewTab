@@ -20,6 +20,11 @@ export class TasksService {
   constructor(private http: HttpClient) {
   }
 
+  findTasksByUser(userId: string): Observable<Task[]> {
+    const url = `${this.todoUrl}/${userId}`;
+    return this.http.get<Task[]>(url);
+  }
+
   getAllTasks(): Observable<Task[]> {
     return this.http.get<Task[]>(this.todoUrl);
   }

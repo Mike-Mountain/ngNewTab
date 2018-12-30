@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Note} from '../models/note.model';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {SharedService} from '../../shared/services/shared.service';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,7 @@ export class NotesService {
   notes: Observable<Note[]>;
 
   notesUrl = 'http://localhost:3000/notes';
+
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
@@ -27,6 +28,11 @@ export class NotesService {
 
   constructor(private sharedService: SharedService,
               private http: HttpClient) {
+  }
+
+  findNotesByUser(userId: string): Observable<Note[]> {
+    const url =`${this.notesUrl}/${userId}`;
+    return this.http.get<Note[]>(url);
   }
 
   getAllNotes(): Observable<Note[]> {

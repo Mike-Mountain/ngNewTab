@@ -4,6 +4,8 @@ import {Bookmark} from '../../models/bookmark.model';
 import {SharedService} from '../../../shared/services/shared.service';
 import {Subscription} from 'rxjs';
 import {MatDialog, MatDialogRef} from '@angular/material';
+import {AuthService} from '../../../users/services/auth.service';
+import {User} from '../../../users/models/user.model';
 
 @Component({
   selector: 'app-bookmarks-list',
@@ -18,14 +20,23 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
   getBookmarksSubscription: Subscription;
   deleteBookmarkSubscription: Subscription;
   openNewBookmarkModalSubscription: Subscription;
+  userSubscription: Subscription;
+
+  user: User;
+
   bookmarkDialogRef: MatDialogRef<any>;
 
   constructor(public bookmarkService: BookmarkService,
               public sharedService: SharedService,
+              public authService: AuthService,
               private matDialog: MatDialog) {
   }
 
   ngOnInit() {
+    this.userSubscription = this.authService.fireBaseUser.subscribe((user: User) => {
+      this.user = user;
+      this.getBookmarks(user._id);
+    });
     this.openNewBookmarkModalSubscription = this.bookmarkService.newBookmarkModal.subscribe(isOpen => {
       if (isOpen) {
         this.bookmarkDialogRef = this.matDialog.open(this.bookmarkForm, {
@@ -33,7 +44,6 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
         });
       }
     });
-    this.getBookmarks();
   }
 
   ngOnDestroy() {
@@ -43,8 +53,9 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
     }
   }
 
-  getBookmarks() {
-    this.getBookmarksSubscription = this.bookmarkService.getBookmarks().subscribe(bookmarks => {
+  getBookmarks(userId: string) {
+    this.getBookmarksSubscription = this.bookmarkService.findBookmarksByUser(userId).subscribe(bookmarks => {
+      console.log(bookmarks);
       this.bookmarks = bookmarks;
     });
   }
@@ -56,7 +67,7 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
   deleteBookmark(id: string) {
     this.deleteBookmarkSubscription = this.bookmarkService.deleteBookmark(id).subscribe((s) => {
       console.log(s);
-      this.getBookmarks();
+      this.getBookmarks(this.user._id);
     });
   }
 

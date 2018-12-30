@@ -4,6 +4,7 @@ import {Task} from '../../models/task.model';
 import {MatDialogRef} from '@angular/material';
 import {TasksService} from '../../services/tasks.service';
 import {Subscription} from 'rxjs';
+import {User} from '../../../users/models/user.model';
 
 @Component({
   selector: 'app-new-task',
@@ -13,6 +14,7 @@ import {Subscription} from 'rxjs';
 export class NewTaskComponent implements OnInit {
 
   @Input() tasksModalRef: MatDialogRef<any>;
+  @Input() user: User;
   @Output() taskAdded = new EventEmitter();
   taskForm: FormGroup;
   addTaskSubscription: Subscription;
@@ -31,12 +33,14 @@ export class NewTaskComponent implements OnInit {
 
   addTask(task: Task) {
     const {title, description, dueDate} = task;
+    const userId = this.user._id;
     ++ this.tasksService.sid_int;
     let sid = `MI-${this.tasksService.sid_int}`;
     if (this.tasksService.sid_int <= 9) {
       sid = `MI-0${this.tasksService.sid_int}`;
     }
     const newTask = new Task({
+      userId: userId,
       title: title,
       description: description,
       dueDate: dueDate,

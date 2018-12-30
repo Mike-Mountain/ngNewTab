@@ -46,5 +46,5 @@
 </ng-template>
 
 <ng-template #taskForm>
-  <app-new-task [tasksModalRef]="newTaskModalRef" (taskAdded)="rePopulateTasksList()"></app-new-task>
+  <app-new-task [tasksModalRef]="newTaskModalRef" [user]="user" (taskAdded)="rePopulateTasksList()"></app-new-task>
 </ng-template>

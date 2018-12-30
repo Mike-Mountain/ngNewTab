@@ -21,6 +21,11 @@ export class BookmarkService {
               private http: HttpClient) {
   }
 
+  findBookmarksByUser(userId: string): Observable<Bookmark[]> {
+    const url = `${this.bookmarksUrl}/${userId}`;
+    return this.http.get<Bookmark[]>(url);
+  }
+
   getBookmarks(): Observable<Bookmark[]> {
     return this.http.get<Bookmark[]>(this.bookmarksUrl);
   }

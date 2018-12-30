@@ -1,4 +1,5 @@
 export class Note {
+  userId: string;
   _id?: string;
   id?: string;
   title: string;
@@ -7,6 +8,7 @@ export class Note {
   modified: Date;
 
   constructor(options: any) {
+    this.userId = options && options.userId;
     this.title = options && options.title || 'New Note';
     this.body = options && options.body || 'Click to edit...';
     this.created = options && options.created || new Date();

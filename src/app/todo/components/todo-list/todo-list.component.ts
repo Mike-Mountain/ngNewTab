@@ -4,6 +4,8 @@ import {TasksService} from '../../services/tasks.service';
 import {Task} from '../../models/task.model';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {Subscription} from 'rxjs';
+import {AuthService} from '../../../users/services/auth.service';
+import {User} from '../../../users/models/user.model';
 
 @Component({
   selector: 'app-todo-list',
@@ -22,17 +24,25 @@ export class TodoListComponent implements OnInit, OnDestroy {
 
   selectedTask: Task;
   tasks: Task[];
+
+  user: User;
+
   viewAllTasksSubscription: Subscription;
   deleteTaskSubscription: Subscription;
   updateTaskSubscription: Subscription;
+  userSubsription: Subscription;
 
   constructor(public sharedService: SharedService,
               public tasksService: TasksService,
+              public authService: AuthService,
               private matDialog: MatDialog) {
   }
 
   ngOnInit() {
-    this.getAllTasks();
+    this.userSubsription = this.authService.fireBaseUser.subscribe((user: User) => {
+      this.getAllTasks(user._id);
+      this.user = user;
+    });
     this.newTaskModalSubscription = this.tasksService.newTaskModal.subscribe(isOpen => {
       if (isOpen) {
         this.newTaskModalRef = this.matDialog.open(this.taskForm, {
@@ -62,11 +72,11 @@ export class TodoListComponent implements OnInit, OnDestroy {
   }
 
   rePopulateTasksList() {
-    this.getAllTasks();
+    this.getAllTasks(this.user._id);
   }
 
-  getAllTasks() {
-    this.viewAllTasksSubscription = this.tasksService.getAllTasks().subscribe(tasks => {
+  getAllTasks(userId: string) {
+    this.viewAllTasksSubscription = this.tasksService.findTasksByUser(userId).subscribe(tasks => {
       this.tasks = tasks;
     });
   }
@@ -90,7 +100,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
 
   deleteTask(task) {
     this.deleteTaskSubscription = this.tasksService.deleteTask(task._id).subscribe(deleted => {
-      this.getAllTasks();
+      this.getAllTasks(this.user._id);
     });
   }
 

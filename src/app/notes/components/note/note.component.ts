@@ -26,7 +26,6 @@ export class NoteComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log(this.editable);
     this.options = {
       parser: (val) => this.markdownService.compile(val.trim()),
       additionalButtons: [

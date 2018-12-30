@@ -29,5 +29,5 @@
 </section>
 
 <ng-template #bookmarkForm>
-  <app-new-bookmark [dialogRef]="bookmarkDialogRef" (addedBookmark)="getBookmarks()"></app-new-bookmark>
+  <app-new-bookmark [dialogRef]="bookmarkDialogRef" (addedBookmark)="getBookmarks(user._id)" [user]="user"></app-new-bookmark>
 </ng-template>

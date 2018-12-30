@@ -4,6 +4,8 @@ import {NotesService} from '../../services/notes.service';
 import {Note} from '../../models/note.model';
 import {FormControl} from '@angular/forms';
 import {Subscription} from 'rxjs';
+import {AuthService} from '../../../users/services/auth.service';
+import {User} from '../../../users/models/user.model';
 
 @Component({
   selector: 'app-notes-list',
@@ -17,17 +19,24 @@ export class NotesListComponent implements OnInit, OnDestroy {
   getAllNotesSubscription: Subscription;
   addNoteSubscription: Subscription;
   newNoteSubscription: Subscription;
+  userSubscription: Subscription;
+
+  user: User;
 
   isNewNote = false;
 
   constructor(public sharedService: SharedService,
-              public notesService: NotesService) {
+              public notesService: NotesService,
+              public authService: AuthService) {
   }
 
   ngOnInit() {
-    this.getAllNotes();
+    this.userSubscription = this.authService.fireBaseUser.subscribe(user => {
+      this.user = user;
+      this.getAllNotes(this.user._id);
+    });
     this.addNoteSubscription = this.notesService.noteAdded.subscribe(() => {
-      this.getAllNotes();
+      this.getAllNotes(this.user && this.user._id);
     });
   }
 
@@ -40,14 +49,16 @@ export class NotesListComponent implements OnInit, OnDestroy {
     }
   }
 
-  getAllNotes() {
-    this.getAllNotesSubscription = this.notesService.getAllNotes().subscribe(notes => {
+  getAllNotes(userId: string) {
+    this.getAllNotesSubscription = this.notesService.findNotesByUser(userId).subscribe(notes => {
+      console.log(notes);
       this.notes = notes;
     });
   }
 
   addNewNote() {
-    const note = new Note({});
+    const note = new Note({userId: this.user._id});
+    console.log(note);
     this.isNewNote = true;
     this.newNoteSubscription = this.notesService.addNote(note).subscribe(newNote => {
       this.notesService.noteAddedSrc.next(true);
@@ -61,7 +72,7 @@ export class NotesListComponent implements OnInit, OnDestroy {
   }
 
   updateNoteStatus() {
-    this.getAllNotes();
+    this.getAllNotes(this.user && this.user._id);
     this.isNewNote = false;
     this.notesService.isEditableSrc.next(false);
   }
@@ -70,7 +81,7 @@ export class NotesListComponent implements OnInit, OnDestroy {
     this.notes.forEach(note => {
       this.notesService.deleteNote(note._id).subscribe(cb => {
         console.log(`${cb} deleted`);
-        this.getAllNotes();
+        this.getAllNotes(this.user && this.user._id);
       });
     });
   }
