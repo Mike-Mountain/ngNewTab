@@ -22,3 +22,11 @@ body {
 .mat-menu-panel {
   min-width: 0 !important;
 }
+
+.md-editor>textarea {
+  padding: .3rem !important;
+}
+
+.md-editor>.md-preview {
+  padding: .3rem !important;
+}

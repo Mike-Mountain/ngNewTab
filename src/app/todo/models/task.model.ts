@@ -11,6 +11,6 @@ export class Task {
     this.complete = options && options.complete || false;
     this.description = options && options.description;
     this.dueDate = options && options.dueDate;
-    this.sid = options && options.sid || 'new';
+    this.sid = options && options.sid || 'editable';
   }
 }

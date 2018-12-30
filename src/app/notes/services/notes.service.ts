@@ -18,8 +18,12 @@ export class NotesService {
 
   selectedNoteSrc = new BehaviorSubject<Note>(null);
   selectedNoteFromService = this.selectedNoteSrc.asObservable();
+
   noteAddedSrc = new BehaviorSubject<boolean>(false);
   noteAdded = this.noteAddedSrc.asObservable();
+
+  isEditableSrc = new BehaviorSubject<boolean>(false);
+  isEditable = this.isEditableSrc.asObservable();
 
   constructor(private sharedService: SharedService,
               private http: HttpClient) {

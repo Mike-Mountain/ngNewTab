@@ -12,8 +12,10 @@ import {SharedModule} from './shared/shared.module';
 import {BookmarksModule} from './bookmarks/bookmarks.module';
 import {NotesModule} from './notes/notes.module';
 import {TodoModule} from './todo/todo.module';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {AngularMarkdownEditorModule} from 'angular-markdown-editor';
+import {MarkdownModule} from 'ngx-markdown';
 
 @NgModule({
   declarations: [
@@ -23,8 +25,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
+    AngularMarkdownEditorModule.forRoot({ iconlibrary: 'fa' }),
+    HttpClientModule,
+    MarkdownModule.forRoot({ loader: HttpClient }),
     FirebaseModule,
     CoreModule,
     BookmarksModule,
