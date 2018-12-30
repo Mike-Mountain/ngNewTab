@@ -1,0 +1,10 @@
+<section class="list-users">
+  <mat-card>
+    <mat-card-content>
+      <h3 class="text-center" mat-card-title>Users:</h3>
+      <ng-container *ngIf="user">
+        {{user | json}}
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+</section>

@@ -1,0 +1,18 @@
+<section class="search-bar">
+  <div class="form-group">
+    <a [matMenuTriggerFor]="menu" class="search-icon">
+      <fa-icon [icon]="currentSearch.icon"></fa-icon>
+    </a>
+    <input type="text" id="search" name="search" class="form-control" #searchQuery>
+    <button class="search" (click)="search(searchQuery.value)">
+      <fa-icon [icon]="faSearch"></fa-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <ng-container *ngFor="let type of searchTypes">
+        <a mat-menu-item class="icon" (click)="changeSearchType(type)">
+          <fa-icon [icon]="type.icon"></fa-icon>
+        </a>
+      </ng-container>
+    </mat-menu>
+  </div>
+</section>

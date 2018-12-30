@@ -2,16 +2,23 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotesListComponent } from './components/notes-list/notes-list.component';
 import {MaterialModule} from '../material/material.module';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {AngularMarkdownEditorModule} from 'angular-markdown-editor';
+import {MarkdownModule} from 'ngx-markdown';
+import { NoteComponent } from './components/note/note.component';
 
 @NgModule({
   declarations: [
-    NotesListComponent
+    NotesListComponent,
+    NoteComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule,
+    AngularMarkdownEditorModule,
+    MarkdownModule.forChild(),
   ],
   exports: [
     NotesListComponent

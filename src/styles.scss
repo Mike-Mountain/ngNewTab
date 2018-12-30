@@ -5,10 +5,28 @@
 @import "~bootstrap/scss/reboot";
 @import "~bootstrap/scss/grid";
 @import "~bootstrap/scss/utilities";
+@import "~bootstrap/scss/forms";
 @import "styles/partials/reset";
 @import "styles/partials/theme";
 @import "styles/partials/utilities-extended";
 @import "styles/partials/mxins";
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: url('https://firebasestorage.googleapis.com/v0/b/ngnewtab.appspot.com/o/Landscape_1.jpg?alt=media&token=3ac1e77d-d166-4475-8c56-4091304f802b') no-repeat;
+  background-size: cover;
+}
+
+.mat-menu-panel {
+  min-width: 0 !important;
+}
+
+.md-editor>textarea {
+  padding: .3rem !important;
+}
+
+.md-editor>.md-preview {
+  padding: .3rem !important;
+}

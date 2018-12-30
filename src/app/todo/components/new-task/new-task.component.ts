@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Task} from '../../models/task.model';
 import {MatDialogRef} from '@angular/material';
 import {TasksService} from '../../services/tasks.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-new-task',
@@ -12,7 +13,9 @@ import {TasksService} from '../../services/tasks.service';
 export class NewTaskComponent implements OnInit {
 
   @Input() tasksModalRef: MatDialogRef<any>;
+  @Output() taskAdded = new EventEmitter();
   taskForm: FormGroup;
+  addTaskSubscription: Subscription;
 
   constructor(private formBuilder: FormBuilder,
               private tasksService: TasksService) {
@@ -20,20 +23,30 @@ export class NewTaskComponent implements OnInit {
 
   ngOnInit() {
     this.taskForm = this.formBuilder.group({
-      title: ['', Validators.required]
+      title: ['', Validators.required],
+      description: [''],
+      dueDate: [new Date()],
     });
   }
 
   addTask(task: Task) {
-    const {title, complete} = task;
-    this.tasksService.addTask({title: title, complete: false})
-      .then(() => {
-        this.closeDialog();
-      })
-      .catch(err => {
-        console.log(err);
-        this.closeDialog();
-      });
+    const {title, description, dueDate} = task;
+    ++ this.tasksService.sid_int;
+    let sid = `MI-${this.tasksService.sid_int}`;
+    if (this.tasksService.sid_int <= 9) {
+      sid = `MI-0${this.tasksService.sid_int}`;
+    }
+    const newTask = new Task({
+      title: title,
+      description: description,
+      dueDate: dueDate,
+      sid: sid,
+      complete: false
+    });
+    this.addTaskSubscription = this.tasksService.addTask(newTask).subscribe(newTodo => {
+      this.taskAdded.emit();
+      this.closeDialog();
+    });
   }
 
   closeDialog() {

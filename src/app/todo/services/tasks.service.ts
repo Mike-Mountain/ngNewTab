@@ -1,53 +1,55 @@
 import {Injectable} from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection, DocumentReference} from '@angular/fire/firestore';
 import {Task} from '../models/task.model';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TasksService {
 
-  tasksList: AngularFirestoreCollection<Task>;
-  tasks: Observable<Task[]>;
+  newTaskModalSrc = new BehaviorSubject<boolean>(false);
+  newTaskModal = this.newTaskModalSrc.asObservable();
+  sid_int: number;
 
-  constructor(private fireStore: AngularFirestore) {
+  todoUrl = 'http://localhost:3000/todos';
+  httpOptions = {
+    headers: new HttpHeaders({'Content-Type': 'application/json'})
+  };
+
+  constructor(private http: HttpClient) {
   }
 
-  getTasks(): Observable<Task[]> {
-    this.tasksList = this.fireStore.collection<Task>('todo');
-    this.tasks = this.tasksList.snapshotChanges()
-    // Get the ID for each bookmark in the list.
-      .pipe(map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return {id, ...data};
-        });
-      }));
-    return this.tasks;
+  getAllTasks(): Observable<Task[]> {
+    return this.http.get<Task[]>(this.todoUrl);
   }
 
-  addTask(task: Task): Promise<DocumentReference> {
-    return this.tasksList.add(task);
+  getTaskById(id: string): Observable<Task> {
+    const url = `${this.todoUrl}/${id}`;
+    return this.http.get<Task>(url);
   }
 
-  completeTask(task: Task, status: string) {
+  findOneTask(options: object): Observable<Task> {
+    const url = `${this.todoUrl}/find`;
+    return this.http.get<Task>(url, options);
+  }
+
+  addTask(task: Task): Observable<Task> {
+    return this.http.post<Task>(this.todoUrl, task, this.httpOptions);
+  }
+
+  completeTask(task: Task, status: string): Observable<Task> {
     status === 'complete' ? task.complete = true : task.complete = false;
-    const collectionRef = this.fireStore.collection('todo').doc(task.id);
-    collectionRef.get().subscribe(todo => {
-      todo.ref.update(task)
-        .catch(err => {
-          console.log(err);
-        });
-    });
+    return this.updateTask(task._id, task);
   }
 
-  deleteTask(id: string) {
-    this.fireStore.collection('todo').doc(id).delete()
-      .catch(err => {
-        console.log(err);
-      });
+  updateTask(id: string, task: Task): Observable<Task> {
+    const url = `${this.todoUrl}/${id}`;
+    return this.http.patch<Task>(url, task);
+  }
+
+  deleteTask(id: string): Observable<string> {
+    const url = `${this.todoUrl}/${id}`;
+    return this.http.delete<string>(url);
   }
 }

@@ -8,17 +8,21 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../material/material.module';
 import {RegisterComponent} from './components/register/register.component';
 import {SharedModule} from '../shared/shared.module';
+import { ListUsersComponent } from './components/list-users/list-users.component';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
     LoginComponent,
     UserComponent,
-    RegisterComponent
+    RegisterComponent,
+    ListUsersComponent
   ],
   imports: [
     CommonModule,
     UsersRoutingModule,
     ReactiveFormsModule,
+    HttpClientModule,
     MaterialModule,
     SharedModule
   ],

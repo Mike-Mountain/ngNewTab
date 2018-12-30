@@ -1,0 +1,30 @@
+<mat-form-field *ngIf="editable">
+  <input matInput type="text" placeholder="Title" [(ngModel)]="note.title">
+</mat-form-field>
+<angular-markdown-editor
+  *ngIf="editable; else displayNote"
+  textareaId="editor1"
+  rows="12"
+  name="markdownText"
+  [options]="options"
+  [(ngModel)]="note.body">
+</angular-markdown-editor>
+<mat-card-footer class="notes-footer">
+  <button mat-raised-button color="warn" class="button" (click)="deleteNote(note._id)">Discard</button>
+  <button mat-raised-button color="primary" class="button" (click)="editable = !editable" *ngIf="!isNewNote">
+    <span *ngIf="!editable">Edit</span>
+    <span *ngIf="editable">Cancel</span>
+  </button>
+  <button mat-raised-button color="accent" class="button" (click)="updateNote(note, note.title, note.body)" *ngIf="editable">Save</button>
+</mat-card-footer>
+
+<ng-template #displayNote>
+  <mat-card>
+    <p matCardTitle class="mb-1">{{note.title}}</p>
+    <mat-card-content>
+      <markdown>
+        {{note.body}}
+      </markdown>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
