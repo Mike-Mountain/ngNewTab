@@ -1,4 +1,5 @@
 <h4 mat-dialog-title class="text-center text-secondary mb-2">Add a new Bookmark</h4>
+<hr class="w-75">
 <mat-dialog-content>
   <form [formGroup]="bookmarkForm">
     <div class="bookmark-form">
@@ -15,7 +16,6 @@
   </form>
   <div class="action-row">
     <button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
-    <button mat-raised-button color="primary" (click)="addBookmark(bookmarkForm.value)">Add</button>
+    <button mat-raised-button color="primary" (click)="addBookmark(bookmarkForm.value.title, bookmarkForm.value.description, bookmarkForm.value.url)">Add</button>
   </div>
 </mat-dialog-content>
-

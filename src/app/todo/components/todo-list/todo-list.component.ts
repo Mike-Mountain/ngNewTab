@@ -46,8 +46,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
     this.newTaskModalSubscription = this.tasksService.newTaskModal.subscribe(isOpen => {
       if (isOpen) {
         this.newTaskModalRef = this.matDialog.open(this.taskForm, {
-          minWidth: 300,
-          width: '35%'
+          width: '40rem'
         });
       } else {
         this.matDialog.closeAll();
@@ -56,6 +55,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.userSubsription.unsubscribe();
     this.newTaskModalSubscription.unsubscribe();
 
     if (this.viewAllTasksSubscription) {
@@ -94,12 +94,12 @@ export class TodoListComponent implements OnInit, OnDestroy {
   }
 
   updateTask(task: Task, status) {
-    this.updateTaskSubscription = this.tasksService.completeTask(task, status).subscribe(updatedTask => {
+    this.updateTaskSubscription = this.tasksService.completeTask(task, status).subscribe(() => {
     });
   }
 
-  deleteTask(task) {
-    this.deleteTaskSubscription = this.tasksService.deleteTask(task._id).subscribe(deleted => {
+  deleteTask(task: Task) {
+    this.deleteTaskSubscription = this.tasksService.deleteTask(task._id, task.userId).subscribe(() => {
       this.getAllTasks(this.user._id);
     });
   }

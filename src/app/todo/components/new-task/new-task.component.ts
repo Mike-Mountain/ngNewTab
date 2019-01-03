@@ -34,6 +34,7 @@ export class NewTaskComponent implements OnInit {
   addTask(task: Task) {
     const {title, description, dueDate} = task;
     const userId = this.user._id;
+    // TODO: Fix the sid_int field.
     ++ this.tasksService.sid_int;
     let sid = `MI-${this.tasksService.sid_int}`;
     if (this.tasksService.sid_int <= 9) {
@@ -47,7 +48,7 @@ export class NewTaskComponent implements OnInit {
       sid: sid,
       complete: false
     });
-    this.addTaskSubscription = this.tasksService.addTask(newTask).subscribe(newTodo => {
+    this.addTaskSubscription = this.tasksService.addTask(newTask).subscribe(() => {
       this.taskAdded.emit();
       this.closeDialog();
     });

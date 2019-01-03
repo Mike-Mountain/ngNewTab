@@ -14,8 +14,10 @@ export class TaskDetailComponent implements OnInit {
   @Input() selectedTask: Task;
   @Input() dialogRef: MatDialogRef<any>;
   @Output() taskDeleted = new EventEmitter();
+
   taskName: FormControl;
   taskDescription: FormControl;
+
   editTaskTitle: boolean;
   editTaskDescription: boolean;
 
@@ -32,7 +34,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   deleteTask() {
-    this.tasksService.deleteTask(this.selectedTask._id).subscribe(value => {
+    this.tasksService.deleteTask(this.selectedTask._id, this.selectedTask.userId).subscribe(value => {
       this.taskDeleted.emit();
       this.closeDialog();
     });

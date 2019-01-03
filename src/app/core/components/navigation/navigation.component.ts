@@ -49,8 +49,12 @@ export class NavigationComponent implements OnInit {
   }
 
   openSettings() {
-    this.sharedService.isSettings = !this.sharedService.isSettings;
-    this.router.navigateByUrl('/settings');
+    this.sharedService.isSettings ? this.sharedService.isSettings = false : this.sharedService.isSettings = true;
+    if (this.sharedService.isSettings) {
+      this.router.navigateByUrl('/settings');
+    } else {
+      this.router.navigateByUrl('/');
+    }
   }
 
   openUsers() {

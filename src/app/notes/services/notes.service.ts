@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Note} from '../models/note.model';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {SharedService} from '../../shared/services/shared.service';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {catchError, tap} from 'rxjs/operators';
+import {MessageService} from '../../shared/services/message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,6 @@ export class NotesService {
   notes: Observable<Note[]>;
 
   notesUrl = 'http://localhost:3000/notes';
-
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
@@ -27,39 +28,110 @@ export class NotesService {
   isEditable = this.isEditableSrc.asObservable();
 
   constructor(private sharedService: SharedService,
+              private messageService: MessageService,
               private http: HttpClient) {
   }
 
   findNotesByUser(userId: string): Observable<Note[]> {
-    const url =`${this.notesUrl}/${userId}`;
-    return this.http.get<Note[]>(url);
+    const url = `${this.notesUrl}/${userId}`;
+    const http$ = this.http.get<Note[]>(url);
+    return http$.pipe(
+      tap(() => {
+        const message = 'Successfully Found';
+        this.messageService.addMessage(userId, message, false, false, 'Notes', 'GET');
+      }),
+      catchError(err => {
+        this.messageService.addError(userId, err, 'Notes', 'GET');
+        return of([]);
+      })
+    );
   }
 
-  getAllNotes(): Observable<Note[]> {
-    return this.http.get<Note[]>(this.notesUrl);
+  getAllNotes(userId): Observable<Note[]> {
+    const http$ = this.http.get<Note[]>(this.notesUrl);
+    return http$.pipe(
+      tap(() => {
+        const message = 'Successfully Fetched';
+        this.messageService.addMessage(userId, message, false, false, 'Notes', 'GET');
+      }),
+      catchError(err => {
+        this.messageService.addError(userId, err, 'Notes', 'GET');
+        return of([]);
+      })
+    );
   }
 
-  getNoteById(id: string): Observable<Note> {
+  getNoteById(id: string, userId: string): Observable<Note> {
     const url = `${this.notesUrl}/${id}`;
-    return this.http.get<Note>(url);
+    const http$ = this.http.get<Note>(url);
+    return http$.pipe(
+      tap(() => {
+        const message = 'Successfully Fetched';
+        this.messageService.addMessage(userId, message, false, true, 'Note', 'GET');
+      }),
+      catchError(err => {
+        this.messageService.addError(userId, err,  'Note', 'GET');
+        return of(null);
+      })
+    );
   }
 
-  findOneNote(options: object): Observable<Note> {
+  findOneNote(options: object, userId: string): Observable<Note> {
     const url = `${this.notesUrl}/find`;
-    return this.http.get<Note>(url, options);
+    const http$ = this.http.get<Note>(url, options);
+    return http$.pipe(
+      tap(() => {
+        const message = 'Successfully Found';
+        this.messageService.addMessage(userId, message, false, true, 'Note', 'GET');
+      }),
+      catchError(err => {
+        this.messageService.addError(userId, err, 'Note', 'GET');
+        return of(null);
+      })
+    );
   }
 
   addNote(note: Note): Observable<Note> {
-    return this.http.post<Note>(this.notesUrl, note, this.httpOptions);
+    const http$ = this.http.post<Note>(this.notesUrl, note, this.httpOptions);
+    return http$.pipe(
+      tap(() => {
+        const message = 'Successfully Added';
+        this.messageService.addMessage(note.userId, message, false, true, 'Note', 'POST');
+      }),
+      catchError(err => {
+        this.messageService.addError(note.userId, err,  'Note', 'POST');
+        return of(null);
+      })
+    );
   }
 
   updateNote(id: string, note: Note) {
     const url = `${this.notesUrl}/${id}`;
-    return this.http.patch<Note>(url, note);
+    const http$ = this.http.patch<Note>(url, note);
+    return http$.pipe(
+      tap(() => {
+        const message = 'Successfully Updated';
+        this.messageService.addMessage(note.userId, message, false, true, 'Note', 'PATCH');
+      }),
+      catchError(err => {
+        this.messageService.addError(note.userId, err, 'Note', 'PATCH');
+        return of(null);
+      })
+    );
   }
 
-  deleteNote(id: string): Observable<string> {
+  deleteNote(id: string, userId: string): Observable<string> {
     const url = `${this.notesUrl}/${id}`;
-    return this.http.delete<string>(url);
+    const http$ = this.http.delete<string>(url);
+    return http$.pipe(
+      tap(() => {
+        const message = 'Successfully Deleted';
+        this.messageService.addMessage(userId, message, false, true, 'Note', 'DELETE');
+      }),
+      catchError(err => {
+        this.messageService.addError(userId, err, 'Note', 'DELETE');
+        return of('The Note could note be deleted');
+      })
+    );
   }
 }

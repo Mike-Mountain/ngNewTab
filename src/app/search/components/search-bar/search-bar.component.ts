@@ -1,6 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {faSearch} from '@fortawesome/free-solid-svg-icons';
-import {SearchType, searchTypes} from '../../models/search-type.model';
+import {SearchType} from '../../models/search-type.model';
+import {searchTypes} from '../../constants/constants';
 import {SearchService} from '../../services/search.service';
 
 @Component({

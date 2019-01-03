@@ -3,6 +3,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {BehaviorSubject} from 'rxjs';
 import {SharedService} from '../../shared/services/shared.service';
 import {UserService} from './user.service';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class AuthService {
 
   constructor(private auth: AngularFireAuth,
               private sharedService: SharedService,
-              private userService: UserService) {
+              private userService: UserService,
+              private router: Router) {
     this.sharedService.isLoadingSrc.next(true);
     auth.authState.subscribe(authUser => {
       if (authUser) {
@@ -26,6 +28,8 @@ export class AuthService {
           this.fireBaseUserSrc.next(user);
           this.isLoggedInSrc.next(true);
         });
+      } else {
+        this.router.navigateByUrl('/login');
       }
       this.sharedService.isLoadingSrc.next(false);
     });

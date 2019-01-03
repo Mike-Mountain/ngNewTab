@@ -33,14 +33,16 @@ export class NotesListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userSubscription = this.authService.fireBaseUser.subscribe(user => {
       this.user = user;
-      this.getAllNotes(this.user._id);
+      this.getAllNotes(this.user && this.user._id);
     });
+
     this.addNoteSubscription = this.notesService.noteAdded.subscribe(() => {
       this.getAllNotes(this.user && this.user._id);
     });
   }
 
   ngOnDestroy() {
+    this.userSubscription.unsubscribe();
     this.getAllNotesSubscription.unsubscribe();
     this.addNoteSubscription.unsubscribe();
 
@@ -51,15 +53,14 @@ export class NotesListComponent implements OnInit, OnDestroy {
 
   getAllNotes(userId: string) {
     this.getAllNotesSubscription = this.notesService.findNotesByUser(userId).subscribe(notes => {
-      console.log(notes);
       this.notes = notes;
     });
   }
 
   addNewNote() {
     const note = new Note({userId: this.user._id});
-    console.log(note);
     this.isNewNote = true;
+
     this.newNoteSubscription = this.notesService.addNote(note).subscribe(newNote => {
       this.notesService.noteAddedSrc.next(true);
       this.notesService.isEditableSrc.next(true);
@@ -79,8 +80,8 @@ export class NotesListComponent implements OnInit, OnDestroy {
 
   deleteAll() {
     this.notes.forEach(note => {
-      this.notesService.deleteNote(note._id).subscribe(cb => {
-        console.log(`${cb} deleted`);
+      this.notesService.deleteNote(note._id, note.userId).subscribe(message => {
+        console.log(`${message} deleted`);
         this.getAllNotes(this.user && this.user._id);
       });
     });

@@ -30,3 +30,8 @@ body {
 .md-editor>.md-preview {
   padding: .3rem !important;
 }
+
+.snackbar-background {
+  background: $primary;
+  color: white;
+}
