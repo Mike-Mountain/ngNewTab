@@ -17,7 +17,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sharedService.currentApp = 'ToDo';
+    this.sharedService.currentApp = 'Notes';
   }
 
   ngOnDestroy() {

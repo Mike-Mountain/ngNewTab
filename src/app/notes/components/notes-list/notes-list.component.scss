@@ -6,28 +6,110 @@
 
 .notes {
   position: relative;
-  margin-top: -1rem;
+  margin-top: 1rem;
 }
 
-.disabled-overlay {
-  position: absolute;
-  top: 0;
-  left: .1rem;
-  width: 100%;
-  Height: 82vh;
-  background-color: rgba(0, 0, 0, 0.2);
-  z-index: 99999;
-}
-
-.notes-toolbar {
+.notes-container {
   background-color: $accent;
-  position: relative;
+  width: 93%;
+  border-radius: 6px;
+  margin: 2rem auto;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.notes-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.folders {
+  width: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.folder-title {
+  color: #f1f1f1;
+  width: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.new-note-button {
+  width: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.note-widget {
+  width: 98%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.box {
+  width: 100%;
+  margin: .75rem;
+  padding: .75rem;
+  color: darken($accent, 15%);
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6), 0 0 1px rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  background-color: lighten($accent, 20%);
+}
+
+.note-list-item-outer {
+  cursor: pointer;
+  &:hover {
+    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.5), 0px 1px 1px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
+    color: $primary;
+  }
+  &:active {
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.6), 0 0 1px rgba(0, 0, 0, 0.6);
+  }
+}
+
+.note-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.folder-nav {
+  width: 24%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.note-view {
+  width: 74%;
+  height: 100%;
+  min-height: 8rem;
+  margin: 0 auto;
+}
+
+.no-note {
+  width: 65%;
+  margin: 0 auto;
+  height: 6rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .add-new  {
-  position: absolute;
-  top: .8rem;
-  right: 1rem;
+  //position: absolute;
+  //top: .8rem;
+  //right: 1rem;
   width: 35px;
   height: 35px;
   line-height: 16px;
@@ -92,4 +174,14 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+}
+
+.notes-line {
+  width: 15%;
+  border: 1px solid $primary;
+}
+
+.folder-line {
+  width: 75%;
+  border: 1px solid $primary;
 }

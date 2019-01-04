@@ -89,7 +89,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
     this.selectedTask = task;
     this.taskDetailRef = this.matDialog.open(this.taskDetail, {
       minWidth: 300,
-      width: '35%'
+      width: '40%'
     });
   }
 

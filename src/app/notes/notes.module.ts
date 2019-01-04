@@ -6,6 +6,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AngularMarkdownEditorModule} from 'angular-markdown-editor';
 import {MarkdownModule} from 'ngx-markdown';
 import { NoteComponent } from './components/note/note.component';
+import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { NoteComponent } from './components/note/note.component';
     FormsModule,
     AngularMarkdownEditorModule,
     MarkdownModule.forChild(),
+    SharedModule
   ],
   exports: [
     NotesListComponent

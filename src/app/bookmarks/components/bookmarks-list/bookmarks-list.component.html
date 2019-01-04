@@ -1,33 +1,29 @@
-<section class="bookmarks">
-  <div class="disabled-overlay"
-       *ngIf="sharedService.currentApp !== 'Bookmarks'"
-       (mouseenter)="sharedService.currentApp = 'Bookmarks'"
-  ></div>
-  <mat-toolbar class="w-101 notes-toolbar">
-    <button mat-button [matMenuTriggerFor]="menu" class="text-light">Bookmarks</button>
-    <button mat-mini-fab color="primary" class="add-new" (click)="openBookmarkModal()">
-      <mat-icon>add</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-    </mat-menu>
-  </mat-toolbar>
-  <ng-container *ngFor="let bookmark of bookmarks">
-    <mat-card>
-      <mat-card-content>
-        <button mat-mini-fab size="small" color="warn" class="delete-button" (click)="deleteBookmark(bookmark._id, bookmark.userId)">
-          <mat-icon>delete</mat-icon>
-        </button>
+<section class="bookmarks-container">
+  <button mat-mini-fab color="accent" class="folders">
+    <mat-icon>folder</mat-icon>
+  </button>
+  <div class="bookmarks">
+    <ng-container *ngFor="let bookmark of bookmarks">
+      <div class="item-container">
         <a [href]="bookmark.url" target="_blank">
-          <div class="bookmark" [matTooltip]="bookmark.description + '  | |  ' + bookmark.url">
-            <img [src]="bookmark.faviconUrl" alt="favicon" width="32" height="32">
-            <h3 class="text-dark">{{bookmark.title}}</h3>
+          <div class="bookmark" [matTooltip]="bookmark.url + ' || ' + bookmark.description">
+            <img [src]="bookmark.faviconUrl" alt="logo" width="32">
+            <small class="title">{{bookmark.title}}</small>
           </div>
         </a>
-      </mat-card-content>
-    </mat-card>
-  </ng-container>
+        <button mat-mini-fab color="warn" class="delete-button"
+                (click)="deleteBookmark(bookmark._id, bookmark.userId)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+  <button mat-mini-fab color="primary" class="add-new" (click)="openBookmarkModal()">
+    <mat-icon>add</mat-icon>
+  </button>
 </section>
 
 <ng-template #bookmarkForm>
-  <app-new-bookmark [dialogRef]="bookmarkDialogRef" (addedBookmark)="getBookmarks(user._id)" [user]="user"></app-new-bookmark>
+  <app-new-bookmark [dialogRef]="bookmarkDialogRef" (addedBookmark)="getBookmarks(user._id)"
+                    [user]="user"></app-new-bookmark>
 </ng-template>

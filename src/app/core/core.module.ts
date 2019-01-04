@@ -7,10 +7,12 @@ import {BookmarksModule} from '../bookmarks/bookmarks.module';
 import {TodoModule} from '../todo/todo.module';
 import {NotesModule} from '../notes/notes.module';
 import {SearchModule} from '../search/search.module';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
-    NavigationComponent
+    NavigationComponent,
+    HeaderComponent
   ],
   imports: [
     CommonModule,
@@ -22,7 +24,8 @@ import {SearchModule} from '../search/search.module';
     SearchModule
   ],
   exports: [
-    NavigationComponent
+    NavigationComponent,
+    HeaderComponent
   ]
 })
 export class CoreModule {

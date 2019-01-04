@@ -1,24 +1,26 @@
-<app-navigation></app-navigation>
-<app-spinner [loading]="sharedService.isLoading | async">
+<app-header></app-header>
+<!--<app-spinner [loading]="sharedService.isLoading | async">-->
   <ng-container *ngIf="authService.fireBaseUser | async; else anon">
     <ng-container *ngIf="sharedService.isSettings; else app">
       <router-outlet></router-outlet>
     </ng-container>
   </ng-container>
   <app-messages></app-messages>
-</app-spinner>
+<!--</app-spinner>-->
 
 <ng-template #app>
-  <div class="columns">
-    <div class="notes column">
-      <app-notes-list></app-notes-list>
-    </div>
-    <div class="todo column">
+  <app-search-bar></app-search-bar>
+  <div class="bookmarks">
+    <app-bookmarks-list></app-bookmarks-list>
+  </div>
+  <app-navigation></app-navigation>
+  <div class="widgets">
+    <ng-container *ngIf="sharedService.currentApp === 'ToDo'">
       <app-todo-list></app-todo-list>
-    </div>
-    <div class="bookmarks column">
-      <app-bookmarks-list></app-bookmarks-list>
-    </div>
+    </ng-container>
+    <ng-container *ngIf="sharedService.currentApp === 'Notes'">
+      <app-notes-list></app-notes-list>
+    </ng-container>
   </div>
 </ng-template>
 

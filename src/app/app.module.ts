@@ -16,6 +16,7 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {AngularMarkdownEditorModule} from 'angular-markdown-editor';
 import {MarkdownModule} from 'ngx-markdown';
+import {SearchModule} from './search/search.module';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import {MarkdownModule} from 'ngx-markdown';
     SharedModule,
     NotesModule,
     TodoModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    SearchModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -3,35 +3,68 @@
        *ngIf="sharedService.currentApp !== 'Notes'"
        (mouseenter)="sharedService.currentApp = 'Notes'"
   ></div>
-  <mat-toolbar class="w-101 notes-toolbar">
-    <button mat-button [matMenuTriggerFor]="menu" class="text-light">Notes</button>
-    <!--<button mat-button class="text-light" (click)="deleteAll()">Delete All</button>-->
-    <button mat-mini-fab color="primary" class="add-new" (click)="addNewNote()">
-      <mat-icon>add</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <ng-container *ngIf="notes && notes.length">
-        <ng-container *ngFor="let note of notes">
-          <button mat-menu-item (click)="selectNote(note)">{{note.title}}</button>
+  <!--<mat-toolbar class="w-101 notes-toolbar">-->
+  <!--<button mat-button [matMenuTriggerFor]="menu" class="text-light">Notes</button>-->
+  <!--&lt;!&ndash;<button mat-button class="text-light" (click)="deleteAll()">Delete All</button>&ndash;&gt;-->
+  <!--<button mat-mini-fab color="primary" class="add-new" (click)="addNewNote()">-->
+  <!--<mat-icon>add</mat-icon>-->
+  <!--</button>-->
+  <!--<mat-menu #menu="matMenu">-->
+  <!--<ng-container *ngIf="notes && notes.length">-->
+  <!--<ng-container *ngFor="let note of notes">-->
+  <!--<button mat-menu-item (click)="selectNote(note)">{{note.title}}</button>-->
+  <!--</ng-container>-->
+  <!--</ng-container>-->
+  <!--</mat-menu>-->
+  <!--</mat-toolbar>-->
+  <div class="notes-container">
+    <div class="notes-header">
+      <div class="folders">
+        <button mat-button [matMenuTriggerFor]="menu" class="text-light">Task Folder Name</button>
+        <mat-menu #menu="matMenu"></mat-menu>
+      </div>
+      <h2 class="folder-title">Notes</h2>
+      <div class="new-note-button">
+        <button mat-mini-fab color="primary" class="add-new" (click)="addNewNote()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+    <hr class="notes-line">
+    <div class="note-widget">
+      <figure class="box folder-nav">
+        <h5 class="text-light">Note Folder Name</h5>
+        <hr class="folder-line">
+        <div class="saved-notes">
+          <ng-container *ngFor="let note of notes">
+            <mat-card class="note-list-item-outer" (click)="selectNote(note)">
+              <mat-card-content>
+                <div class="note-list-item">
+                  <h6>{{note.title}}</h6>
+                  <small>{{note.created | date:'medium'}}</small>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </ng-container>
+        </div>
+      </figure>
+      <figure class="box note-view">
+        <ng-container *ngIf="selectedNote; else noNote">
+          <app-note
+            [note]="selectedNote"
+            [editable]="notesService.isEditable | async"
+            [isNewNote]="isNewNote"
+            (deleted)="updateNoteStatus()"
+            (updated)="updateNoteStatus()">
+          </app-note>
         </ng-container>
-      </ng-container>
-    </mat-menu>
-  </mat-toolbar>
-  <mat-card>
-    <ng-container *ngIf="notesService.selectedNoteFromService | async as note; else noNote">
-      <app-note
-        [note]="note"
-        [editable]="notesService.isEditable | async"
-        [isNewNote]="isNewNote"
-        (deleted)="updateNoteStatus()"
-        (updated)="updateNoteStatus()">
-      </app-note>
-    </ng-container>
-  </mat-card>
+      </figure>
+    </div>
+  </div>
 </section>
 
 <ng-template #noNote>
-  <div class="d-flex justify-content-center align-items-center">
-    <p>Please add a new note or choose a note above to get started</p>
+  <div class="no-note">
+    <p class="text-light">Please add a new note or choose a note above to get started</p>
   </div>
 </ng-template>

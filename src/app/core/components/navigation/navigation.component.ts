@@ -20,8 +20,6 @@ export class NavigationComponent implements OnInit {
   @ViewChild('bookmarkForm') bookmarkForm: TemplateRef<HTMLElement>;
   @ViewChild('taskForm') taskForm: TemplateRef<HTMLElement>;
   bookmarkDialogRef: MatDialogRef<any>;
-  currentDate: Date;
-  currentWeather: string;
   app: string;
   search: boolean;
 
@@ -35,8 +33,6 @@ export class NavigationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.currentDate = new Date();
-    this.currentWeather = 'Clear, 32 degrees.';
   }
 
   closeSearch(event) {
@@ -46,15 +42,6 @@ export class NavigationComponent implements OnInit {
   changeCurrentApp(app) {
     this.sharedService.currentApp = app;
     this.app = this.sharedService.currentApp;
-  }
-
-  openSettings() {
-    this.sharedService.isSettings ? this.sharedService.isSettings = false : this.sharedService.isSettings = true;
-    if (this.sharedService.isSettings) {
-      this.router.navigateByUrl('/settings');
-    } else {
-      this.router.navigateByUrl('/');
-    }
   }
 
   openUsers() {

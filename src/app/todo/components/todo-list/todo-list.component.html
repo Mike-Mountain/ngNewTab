@@ -3,15 +3,27 @@
        *ngIf="sharedService.currentApp !== 'ToDo'"
        (mouseenter)="sharedService.currentApp = 'ToDo'"
   ></div>
-  <mat-toolbar class="w-101 notes-toolbar">
-    <button mat-button [matMenuTriggerFor]="menu" class="text-light">Tasks</button>
-    <button mat-mini-fab color="primary" class="add-new" (click)="openTasksModal()">
-      <mat-icon>add</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-    </mat-menu>
-  </mat-toolbar>
+  <!--<mat-toolbar class="notes-toolbar">-->
+  <!--<button mat-button [matMenuTriggerFor]="menu" class="text-light">Tasks</button>-->
+  <!--<button mat-mini-fab color="primary" class="add-new" (click)="openTasksModal()">-->
+  <!--<mat-icon>add</mat-icon>-->
+  <!--</button>-->
+  <!--<mat-menu #menu="matMenu"></mat-menu>-->
+  <!--</mat-toolbar>-->
   <div class="todo-list">
+    <div class="todo-list-header">
+      <div class="folders">
+        <button mat-button [matMenuTriggerFor]="menu" class="text-light">Task Folder Name</button>
+        <mat-menu #menu="matMenu"></mat-menu>
+      </div>
+      <h2 class="folder-title">To Do</h2>
+      <div class="new-task-button">
+        <button mat-mini-fab color="primary" class="add-new" (click)="openTasksModal()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+    <hr class="todo-line">
     <ng-container *ngIf="tasks && tasks.length; else noTasks">
       <ng-container *ngFor="let task of tasks">
         <div class="box" [class.completed]="task.complete">
@@ -42,7 +54,8 @@
 </ng-template>
 
 <ng-template #taskDetail>
-  <app-task-detail [selectedTask]="selectedTask" [dialogRef]="taskDetailRef" (taskDeleted)="rePopulateTasksList()"></app-task-detail>
+  <app-task-detail [selectedTask]="selectedTask" [dialogRef]="taskDetailRef"
+                   (taskDeleted)="rePopulateTasksList()"></app-task-detail>
 </ng-template>
 
 <ng-template #taskForm>

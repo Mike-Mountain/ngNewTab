@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {ApplicationRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {SharedService} from '../../../shared/services/shared.service';
 import {NotesService} from '../../services/notes.service';
 import {Note} from '../../models/note.model';
@@ -15,10 +15,12 @@ import {User} from '../../../users/models/user.model';
 export class NotesListComponent implements OnInit, OnDestroy {
 
   notes: Note[];
+  selectedNote: Note;
 
   getAllNotesSubscription: Subscription;
   addNoteSubscription: Subscription;
   newNoteSubscription: Subscription;
+  selectedNoteSubscription: Subscription;
   userSubscription: Subscription;
 
   user: User;
@@ -27,7 +29,8 @@ export class NotesListComponent implements OnInit, OnDestroy {
 
   constructor(public sharedService: SharedService,
               public notesService: NotesService,
-              public authService: AuthService) {
+              public authService: AuthService,
+              private ar: ApplicationRef) {
   }
 
   ngOnInit() {
@@ -39,6 +42,10 @@ export class NotesListComponent implements OnInit, OnDestroy {
     this.addNoteSubscription = this.notesService.noteAdded.subscribe(() => {
       this.getAllNotes(this.user && this.user._id);
     });
+
+    this.selectedNoteSubscription = this.notesService.selectedNoteFromService.subscribe(note => {
+      this.selectedNote = note;
+    });
   }
 
   ngOnDestroy() {
@@ -48,6 +55,9 @@ export class NotesListComponent implements OnInit, OnDestroy {
 
     if (this.newNoteSubscription) {
       this.newNoteSubscription.unsubscribe();
+    }
+    if (this.selectedNoteSubscription) {
+      this.selectedNoteSubscription.unsubscribe();
     }
   }
 
@@ -69,7 +79,7 @@ export class NotesListComponent implements OnInit, OnDestroy {
   }
 
   selectNote(note: Note) {
-    this.notesService.selectedNoteSrc.next(note);
+    this.notesService.selectNote(note);
   }
 
   updateNoteStatus() {

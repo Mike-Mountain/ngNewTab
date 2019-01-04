@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {ApplicationRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewContainerRef} from '@angular/core';
 import {Note} from '../../models/note.model';
 import {EditorOption} from 'angular-markdown-editor';
 import {MarkdownService} from 'ngx-markdown';
@@ -20,8 +20,10 @@ export class NoteComponent implements OnInit, OnDestroy {
   @Output() deleted = new EventEmitter();
   @Output() updated = new EventEmitter();
 
+  selectedNote: Note;
   options: EditorOption;
 
+  selectedNoteSubscription: Subscription;
   updateNoteSubscription: Subscription;
   deleteNoteSubscription: Subscription;
 
@@ -30,6 +32,9 @@ export class NoteComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.selectedNoteSubscription = this.notesService.selectedNoteFromService.subscribe(note => {
+      this.selectedNote = note;
+    });
     this.options = {
       parser: (val) => this.markdownService.compile(val.trim()),
       additionalButtons: mdExtraButtons
@@ -37,6 +42,10 @@ export class NoteComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.selectedNoteSubscription) {
+      this.selectedNoteSubscription.unsubscribe();
+    }
+
     if (this.updateNoteSubscription) {
       this.updateNoteSubscription.unsubscribe();
     }
@@ -61,12 +70,16 @@ export class NoteComponent implements OnInit, OnDestroy {
   }
 
   deleteNote(id: string) {
-    this.deleteNoteSubscription = this.notesService.deleteNote(id, this.note.userId).subscribe((s) => {
+    this.deleteNoteSubscription = this.notesService.deleteNote(id, this.selectedNote.userId).subscribe((s) => {
       console.log(s);
       this.deleted.emit();
       this.notesService.isEditableSrc.next(false);
       this.notesService.selectedNoteSrc.next(null);
     });
+  }
+
+  log(m) {
+    console.log(m);
   }
 
 }

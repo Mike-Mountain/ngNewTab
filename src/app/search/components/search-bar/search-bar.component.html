@@ -1,18 +1,28 @@
 <section class="search-bar">
-  <div class="form-group">
+  <div class="search-container" [class.double-search]="currentSearch.name === 'Reddit'">
     <a [matMenuTriggerFor]="menu" class="search-icon">
       <fa-icon [icon]="currentSearch.icon"></fa-icon>
     </a>
-    <input type="text" id="search" name="search" class="form-control" #searchQuery>
-    <button class="search" (click)="search(searchQuery.value)">
+    <div class="w-50 d-flex flex-column align-items-center">
+      <mat-form-field class="search-main">
+        <input matInput type="text" id="search" name="search" placeholder="Search" class="search-input" [(ngModel)]="mainSearchQuery">
+        <mat-menu #menu="matMenu">
+          <ng-container *ngFor="let type of searchTypes">
+            <a mat-menu-item class="icon" (click)="changeSearchType(type)">
+              <fa-icon [icon]="type.icon"></fa-icon>
+            </a>
+          </ng-container>
+        </mat-menu>
+      </mat-form-field>
+      <ng-container *ngIf="currentSearch.name === 'Reddit'">
+        <mat-form-field class="search-secondary">
+          <input matInput type="text" id="reddit-search" name="reddit-search" placeholder="/r/"
+                 class="reddit-search-input" [(ngModel)]="secondarySearchQuery">
+        </mat-form-field>
+      </ng-container>
+    </div>
+    <button class="search" (click)="search(mainSearchQuery, secondarySearchQuery)">
       <fa-icon [icon]="faSearch"></fa-icon>
     </button>
-    <mat-menu #menu="matMenu">
-      <ng-container *ngFor="let type of searchTypes">
-        <a mat-menu-item class="icon" (click)="changeSearchType(type)">
-          <fa-icon [icon]="type.icon"></fa-icon>
-        </a>
-      </ng-container>
-    </mat-menu>
   </div>
 </section>

@@ -18,7 +18,7 @@ $ChromeNewTab-accent: mat-palette($mat-deep-purple, A200, A100, A400);
 $ChromeNewTab-warn: mat-palette($mat-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$ChromeNewTab-theme: mat-light-theme($ChromeNewTab-primary, $ChromeNewTab-accent, $ChromeNewTab-warn);
+$ChromeNewTab-theme: mat-dark-theme($ChromeNewTab-primary, $ChromeNewTab-accent, $ChromeNewTab-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component

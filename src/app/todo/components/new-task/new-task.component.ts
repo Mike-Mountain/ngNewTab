@@ -55,6 +55,7 @@ export class NewTaskComponent implements OnInit {
   }
 
   closeDialog() {
+    this.tasksService.newTaskModalSrc.next(false);
     this.tasksModalRef.close();
   }
 

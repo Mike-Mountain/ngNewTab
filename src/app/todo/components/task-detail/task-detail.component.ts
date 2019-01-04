@@ -34,7 +34,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   deleteTask() {
-    this.tasksService.deleteTask(this.selectedTask._id, this.selectedTask.userId).subscribe(value => {
+    this.tasksService.deleteTask(this.selectedTask._id, this.selectedTask.userId).subscribe(() => {
       this.taskDeleted.emit();
       this.closeDialog();
     });
@@ -48,7 +48,7 @@ export class TaskDetailComponent implements OnInit {
   updateTask() {
     this.selectedTask.title = this.taskName.value;
     this.selectedTask.description = this.taskDescription.value;
-    this.tasksService.updateTask(this.selectedTask._id, this.selectedTask).subscribe(task => {
+    this.tasksService.updateTask(this.selectedTask._id, this.selectedTask).subscribe(() => {
       this.editTaskTitle = false;
       this.editTaskDescription = false;
     });

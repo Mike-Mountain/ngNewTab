@@ -1,3 +1,5 @@
+@import "../../../../styles/partials/variables";
+
 .notes-footer {
   width: 85%;
   margin: 1rem auto;
@@ -7,4 +9,12 @@
 
 .button {
   width: 5rem;
+}
+
+.note-title {
+  margin-bottom: .5rem !important;
+}
+
+.note-line {
+  border: 1px solid $primary;
 }

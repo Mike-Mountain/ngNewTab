@@ -2,39 +2,54 @@
 
 .todo {
   position: relative;
-  margin-top: -1rem;
-}
-
-.disabled-overlay {
-  position: absolute;
-  top: 0;
-  left: .1rem;
-  width: 100%;
-  Height: 82vh;
-  background-color: rgba(0, 0, 0, 0.2);
-  z-index: 99;
 }
 
 .todo-list {
   background-color: $accent;
+  width: 50%;
   border-radius: 6px;
-  margin: 1rem .5rem;
-  padding: .5rem;
+  margin: 2rem auto;
+  padding: 2rem 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.notes-toolbar {
-  background-color: $accent;
-  position: relative;
+.todo-list-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.folders {
+  width: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.folder-title {
+  color: #f1f1f1;
+  width: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.new-task-button {
+  width: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .add-new  {
-  position: absolute;
-  top: .8rem;
-  right: 1rem;
+  // Using position absolute because for some reason the `mat-menu` template is an actual DOM element even when the menu is closed.
+  // It takes up space when using flex and the items end up distributing unevenly.
+  //position: absolute;
+  //top: .8rem;
+  //right: 18rem;
   width: 35px;
   height: 35px;
   line-height: 16px;
@@ -55,9 +70,9 @@
 }
 
 .box {
-  width: 95%;
-  margin: .5rem auto;
-  padding: .5rem;
+  width: 85%;
+  margin: .75rem auto;
+  padding: .75rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -111,4 +126,9 @@ a.detail-view-link {
       color: lighten(#0C7CE1, 15%);
     }
   }
+}
+
+.todo-line {
+  width: 25%;
+  border: 1px solid $primary;
 }

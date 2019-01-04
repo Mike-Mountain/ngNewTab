@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
 import {faSearch} from '@fortawesome/free-solid-svg-icons';
 import {SearchType} from '../../models/search-type.model';
 import {searchTypes} from '../../constants/constants';
@@ -11,12 +11,16 @@ import {SearchService} from '../../services/search.service';
 })
 export class SearchBarComponent implements OnInit {
 
+  @ViewChild('searchQuery') searchQuery: TemplateRef<HTMLInputElement>;
+
   @Output() closeSearch = new EventEmitter();
 
   faSearch = faSearch;
   searchTypes = searchTypes;
   currentSearch: SearchType;
   searchQueryUrl: string;
+  mainSearchQuery: string;
+  secondarySearchQuery: string;
 
   constructor(private searchService: SearchService) {
   }
@@ -31,11 +35,20 @@ export class SearchBarComponent implements OnInit {
     this.searchQueryUrl = this.currentSearch.url;
   }
 
-  search(query) {
+  search(query: string, secondaryQuery: string) {
     const url = `https://google.com/search?q=${query}`;
     const searchType = this.searchService.checkSearchType(this.currentSearch.name);
+    // There's a space here because the url auto-escapes it anyway and the search breaks without it.
+    // eg: 'https://google.com/search?q=array%20%site:stackoverflow.com' vs 'https://google.com/search?q=arraysite:stackoverflow.com'
     this.currentSearch.url = `${url} ${searchType}`;
+    if (secondaryQuery !== '') {
+      switch (this.currentSearch.name) {
+        case 'Reddit':
+          this.currentSearch.url = `${url} ${searchType}/r/${secondaryQuery}`;
+      }
+    }
     window.open(this.currentSearch.url, '_blank');
+
   }
 
   close() {

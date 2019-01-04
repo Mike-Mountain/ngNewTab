@@ -27,13 +27,15 @@ export class NotesService {
   isEditableSrc = new BehaviorSubject<boolean>(false);
   isEditable = this.isEditableSrc.asObservable();
 
+  public isLoadingNotes: boolean;
+
   constructor(private sharedService: SharedService,
               private messageService: MessageService,
               private http: HttpClient) {
   }
 
   findNotesByUser(userId: string): Observable<Note[]> {
-    const url = `${this.notesUrl}/${userId}`;
+    const url = `${this.notesUrl}/user/${userId}`;
     const http$ = this.http.get<Note[]>(url);
     return http$.pipe(
       tap(() => {
@@ -62,7 +64,7 @@ export class NotesService {
   }
 
   getNoteById(id: string, userId: string): Observable<Note> {
-    const url = `${this.notesUrl}/${id}`;
+    const url = `${this.notesUrl}/note/${id}`;
     const http$ = this.http.get<Note>(url);
     return http$.pipe(
       tap(() => {
@@ -70,7 +72,7 @@ export class NotesService {
         this.messageService.addMessage(userId, message, false, true, 'Note', 'GET');
       }),
       catchError(err => {
-        this.messageService.addError(userId, err,  'Note', 'GET');
+        this.messageService.addError(userId, err, 'Note', 'GET');
         return of(null);
       })
     );
@@ -91,6 +93,12 @@ export class NotesService {
     );
   }
 
+  selectNote(note: Note) {
+    this.isLoadingNotes = true;
+    this.selectedNoteSrc.next(note);
+    this.isLoadingNotes = false;
+  }
+
   addNote(note: Note): Observable<Note> {
     const http$ = this.http.post<Note>(this.notesUrl, note, this.httpOptions);
     return http$.pipe(
@@ -99,7 +107,7 @@ export class NotesService {
         this.messageService.addMessage(note.userId, message, false, true, 'Note', 'POST');
       }),
       catchError(err => {
-        this.messageService.addError(note.userId, err,  'Note', 'POST');
+        this.messageService.addError(note.userId, err, 'Note', 'POST');
         return of(null);
       })
     );

@@ -1,0 +1,30 @@
+<section class="top-bar">
+  <ng-container *ngIf="authService.fireBaseUser | async as user; else anon">
+    <div class="settings">
+      <mat-icon color="accent" *ngIf="authService.fireBaseUser | async" (click)="openSettings()">settings</mat-icon>
+    </div>
+    <div class="user">
+      <h2 class="text-center">Welcome {{user.username}}</h2>
+      <!--<div class="profile-image">-->
+        <!--<img src="../../../../assets/images/happy.svg" alt="profile_image" width="75">-->
+      <!--</div>-->
+    </div>
+    <div class="general-info">
+      <p class="text-light">{{currentDate | date:'mediumDate'}}</p>
+      <p class="text-light">{{currentWeather}}</p>
+    </div>
+  </ng-container>
+</section>
+
+<ng-template #anon>
+  <div class="user-bar" *ngIf="!(sharedService.isLoading | async)">
+    <div class="buttons">
+      <button mat-button color="primary" size="small" class="button" routerLink="user/register"
+              routerLinkActive="mat-stroked-button">Register
+      </button>
+      <button mat-button color="accent" class="button" routerLink="user/login" routerLinkActive="mat-stroked-button">
+        Login
+      </button>
+    </div>
+  </div>
+</ng-template>

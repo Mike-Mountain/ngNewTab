@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import {MaterialModule} from '../material/material.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   imports: [
     CommonModule,
     MaterialModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FormsModule,
   ],
   exports: [
     SearchBarComponent
