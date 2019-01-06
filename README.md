@@ -2,17 +2,14 @@
 
 ChromeNewTab (or ngNewTab) is a starter page for a new tab built as a Chrome extension. 
 
-Feel free to fork the project. I won't accept any Pull Requests until I can get a style guide and 
-planning wiki up. I'm not actually expecting anyone to even see this anyway, never mind make a PR. 
-So if you want to and I'm taking too long, just shout. 
+Feel free to fork the project.
 
 ## Usage
 
-This project currently utilises Firebase (and [AngularFire2](https://github.com/angular/angularfire2)) for it's server (Planning on building my own one day). 
-In order to make full use of the app, set up a project on your firebase console, and add the config 
-variable to your environments files (as stated [here](https://github.com/angular/angularfire2/blob/master/docs/install-and-setup.md)).
+The API for this project can be found [here](https://github.com/Mike-Mountain/ngNewTabApi).
+The project uses Firebase for authentication, so if you're going to use it make sure you've set up a project on your firebase console and put the config object into your environments folder as decribed [here](https://github.com/angular/angularfire2/blob/master/docs/install-and-setup.md).
 
-Once Firebase is configured, test it on your local development server with `ng serve`. 
+Test on your local development server with `ng serve`. 
 
 Once you're happy, run the Build with `ng build`. In the `app` folder, you'll find a `manifest.json`
 file. Edit as you wish and then copy that file into your built project inside your `dist` folder.
