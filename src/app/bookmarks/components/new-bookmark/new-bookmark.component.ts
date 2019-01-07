@@ -5,6 +5,7 @@ import {Bookmark} from '../../models/bookmark.model';
 import {MatDialogRef, MatSnackBar, MatSnackBarConfig, MatSnackBarRef} from '@angular/material';
 import {SharedService} from '../../../shared/services/shared.service';
 import {User} from '../../../users/models/user.model';
+import {Folder} from '../../../shared/models/folder.model';
 
 @Component({
   selector: 'app-new-bookmark',
@@ -15,6 +16,8 @@ export class NewBookmarkComponent implements OnInit {
 
   @Input() dialogRef: MatDialogRef<any>;
   @Input() user: User;
+  @Input() folders: Folder[];
+  @Input() currentFolder: Folder;
   @Output() addedBookmark = new EventEmitter();
 
   bookmarkForm: FormGroup;
@@ -27,7 +30,8 @@ export class NewBookmarkComponent implements OnInit {
     this.bookmarkForm = this.formBuilder.group({
       title: ['', Validators.required],
       description: [''],
-      url: ['', Validators.required]
+      url: ['', Validators.required],
+      folder: [this.currentFolder.name, Validators.required],
     });
   }
 
@@ -35,8 +39,9 @@ export class NewBookmarkComponent implements OnInit {
     const userId = this.user && this.user._id;
     const url = `https://${bookmarkUrl}`;
     const faviconUrl = `https://${SharedService.getFaviconUrl(bookmarkUrl)}`;
+    const folder = this.bookmarkForm.value.folder;
 
-    this.bookmarkService.addBookmark({userId, title, description, url, faviconUrl}).subscribe(() => {
+    this.bookmarkService.addBookmark({userId, title, description, url, faviconUrl, folder}, folder).subscribe(() => {
       this.addedBookmark.emit();
       this.closeDialog();
     });

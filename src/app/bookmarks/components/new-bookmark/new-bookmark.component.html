@@ -12,6 +12,13 @@
       <mat-form-field>
         <textarea matInput rows="2" type="text" placeholder="Description" formControlName="description"></textarea>
       </mat-form-field>
+      <mat-form-field>
+        <select matNativeControl placeholder="Folder" formControlName="folder">
+          <ng-container *ngFor="let folder of folders">
+            <option [value]="folder.name">{{folder.name}}</option>
+          </ng-container>
+        </select>
+      </mat-form-field>
     </div>
   </form>
   <div class="action-row">

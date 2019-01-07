@@ -5,4 +5,5 @@ export interface Bookmark {
   description?: string;
   url: string;
   faviconUrl: string;
+  folder: string;
 }

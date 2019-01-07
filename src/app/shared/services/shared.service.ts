@@ -35,36 +35,43 @@ export class SharedService {
       error: '',
       text: ''
     };
-    // Check the status and operation type to return the appropriate message
-    switch (message.status) {
-      case 404:
-        return textObject = {
-          error: `${message.status} ${message.statusText}`,
-          text: `${origin} could not be found`
-        };
-      case 500:
-        const text500 = SharedService.switchError500Text(operation);
-        return textObject = {
-          error: `${message.status} ${message.statusText}`,
-          text: `${text500} ${origin}`
-        };
-      case 403:
-        const text403 = SharedService.switchError403Text(operation);
-        return textObject = {
-          error: `${message.status} ${message.statusText}`,
-          text: `${text403} ${origin}`
-        };
-      case 504:
-        return textObject = {
-          error: `${message.status} ${message.statusText}`,
-          text: `${origin} timed out`
-        };
-      default:
-        const defaultText = SharedService.switchDefaultErrorText(operation);
-        return textObject = {
-          error: `${message.status} ${message.statusText}`,
-          text: `${origin} ${defaultText}`
-        };
+    if (message && message.status) {
+      // Check the status and operation type to return the appropriate message
+      switch (message.status) {
+        case 404:
+          return textObject = {
+            error: `${message.status} ${message.statusText}`,
+            text: `${origin} could not be found`
+          };
+        case 500:
+          const text500 = SharedService.switchError500Text(operation);
+          return textObject = {
+            error: `${message.status} ${message.statusText}`,
+            text: `${text500} ${origin}`
+          };
+        case 403:
+          const text403 = SharedService.switchError403Text(operation);
+          return textObject = {
+            error: `${message.status} ${message.statusText}`,
+            text: `${text403} ${origin}`
+          };
+        case 504:
+          return textObject = {
+            error: `${message.status} ${message.statusText}`,
+            text: `${origin} timed out`
+          };
+        default:
+          const defaultText = SharedService.switchDefaultErrorText(operation);
+          return textObject = {
+            error: `${message.status} ${message.statusText}`,
+            text: `${origin} ${defaultText}`
+          };
+      }
+    } else {
+      return {
+        error: '',
+        text: ''
+      };
     }
 
   }

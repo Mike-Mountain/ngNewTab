@@ -11,6 +11,7 @@
 .bookmarks {
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
   max-width: 93%;
   max-height: 15rem;
@@ -47,6 +48,32 @@
         padding-right: .01rem;
         padding-top: 3px;
       }
+    }
+  }
+}
+
+.folder-button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-folder {
+  width: 25px;
+  height: 25px;
+  line-height: 14px;
+  font-size: 14px;
+  margin-left: 1rem;
+
+  &::ng-deep .mat-button-wrapper{
+    line-height: 16px;
+    padding: 0;
+
+    .mat-icon {
+      font-size: 18px;
+      padding-right: .01rem;
+      padding-top: 3px;
     }
   }
 }
@@ -146,4 +173,10 @@
       padding-top: 2.5px;
     }
   }
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

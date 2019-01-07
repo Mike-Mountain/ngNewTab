@@ -5,6 +5,7 @@ import {MatDialogRef} from '@angular/material';
 import {TasksService} from '../../services/tasks.service';
 import {Subscription} from 'rxjs';
 import {User} from '../../../users/models/user.model';
+import {Folder} from '../../../shared/models/folder.model';
 
 @Component({
   selector: 'app-new-task',
@@ -15,6 +16,8 @@ export class NewTaskComponent implements OnInit {
 
   @Input() tasksModalRef: MatDialogRef<any>;
   @Input() user: User;
+  @Input() folders: Folder[];
+  @Input() currentFolder: Folder;
   @Output() taskAdded = new EventEmitter();
   taskForm: FormGroup;
   addTaskSubscription: Subscription;
@@ -28,11 +31,12 @@ export class NewTaskComponent implements OnInit {
       title: ['', Validators.required],
       description: [''],
       dueDate: [new Date()],
+      folder: [this.currentFolder.name, Validators.required]
     });
   }
 
   addTask(task: Task) {
-    const {title, description, dueDate} = task;
+    const {title, description, dueDate, folder} = task;
     const userId = this.user._id;
     // TODO: Fix the sid_int field.
     ++ this.tasksService.sid_int;
@@ -46,10 +50,11 @@ export class NewTaskComponent implements OnInit {
       description: description,
       dueDate: dueDate,
       sid: sid,
-      complete: false
+      complete: false,
+      folder: folder
     });
-    this.addTaskSubscription = this.tasksService.addTask(newTask).subscribe(() => {
-      this.taskAdded.emit();
+    this.addTaskSubscription = this.tasksService.addTask(newTask).subscribe(todo => {
+      this.taskAdded.emit(todo);
       this.closeDialog();
     });
   }

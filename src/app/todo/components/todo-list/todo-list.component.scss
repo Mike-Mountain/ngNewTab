@@ -44,12 +44,33 @@
   align-items: center;
 }
 
+.folder-button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-folder {
+  width: 25px;
+  height: 25px;
+  line-height: 14px;
+  font-size: 14px;
+  margin-left: 1rem;
+
+  &::ng-deep .mat-button-wrapper{
+    line-height: 16px;
+    padding: 0;
+
+    .mat-icon {
+      font-size: 18px;
+      padding-right: .01rem;
+      padding-top: 3px;
+    }
+  }
+}
+
 .add-new  {
-  // Using position absolute because for some reason the `mat-menu` template is an actual DOM element even when the menu is closed.
-  // It takes up space when using flex and the items end up distributing unevenly.
-  //position: absolute;
-  //top: .8rem;
-  //right: 18rem;
   width: 35px;
   height: 35px;
   line-height: 16px;
@@ -131,4 +152,10 @@ a.detail-view-link {
 .todo-line {
   width: 25%;
   border: 1px solid $primary;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

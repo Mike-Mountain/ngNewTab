@@ -1,21 +1,40 @@
 <section class="bookmarks-container">
-  <button mat-mini-fab color="accent" class="folders">
-    <mat-icon>folder</mat-icon>
-  </button>
-  <div class="bookmarks">
-    <ng-container *ngFor="let bookmark of bookmarks">
-      <div class="item-container">
-        <a [href]="bookmark.url" target="_blank">
-          <div class="bookmark" [matTooltip]="bookmark.url + ' || ' + bookmark.description">
-            <img [src]="bookmark.faviconUrl" alt="logo" width="32">
-            <small class="title">{{bookmark.title}}</small>
-          </div>
-        </a>
-        <button mat-mini-fab color="warn" class="delete-button"
-                (click)="deleteBookmark(bookmark._id, bookmark.userId)">
-          <mat-icon>delete</mat-icon>
+  <div>
+    <button mat-mini-fab color="accent" class="folders" [matMenuTriggerFor]="foldersMenu">
+      <mat-icon>folder</mat-icon>
+    </button>
+    <mat-menu #foldersMenu class="folders-menu">
+      <ng-container *ngFor="let folder of folders">
+        <button mat-menu-item (click)="getBookmarks(user._id, folder.name, folder)" class="folder-button">
+          {{folder.name}}
+          <button mat-mini-fab class="delete-folder" (click)="deleteCurrentFolder(currentFolder._id, user._id, currentFolder.name)">
+            <mat-icon class="mr-0">delete</mat-icon>
+          </button>
+        </button>
+      </ng-container>
+      <div class="actions">
+        <button mat-menu-item class="text-center" (click)="openNewFolderModal()" matTooltip="Add a new Folder">
+          <mat-icon class="mr-0">add</mat-icon>
         </button>
       </div>
+    </mat-menu>
+  </div>
+  <div class="bookmarks">
+    <ng-container *ngIf="bookmarks && bookmarks.length; else noBookmarks">
+      <ng-container *ngFor="let bookmark of bookmarks">
+        <div class="item-container">
+          <a [href]="bookmark.url" target="_blank">
+            <div class="bookmark" [matTooltip]="bookmark.url + ' || ' + bookmark.description">
+              <img [src]="bookmark.faviconUrl" alt="logo" width="32">
+              <small class="title">{{bookmark.title}}</small>
+            </div>
+          </a>
+          <button mat-mini-fab color="warn" class="delete-button" [disabled]="!currentFolder"
+                  (click)="deleteBookmark(bookmark._id, bookmark.userId, bookmark.folder)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </ng-container>
     </ng-container>
   </div>
   <button mat-mini-fab color="primary" class="add-new" (click)="openBookmarkModal()">
@@ -24,6 +43,13 @@
 </section>
 
 <ng-template #bookmarkForm>
-  <app-new-bookmark [dialogRef]="bookmarkDialogRef" (addedBookmark)="getBookmarks(user._id)"
-                    [user]="user"></app-new-bookmark>
+  <app-new-bookmark [dialogRef]="bookmarkDialogRef" [user]="user" [folders]="folders" [currentFolder]="currentFolder"
+                    (addedBookmark)="getBookmarks(user._id, 'Personal')"></app-new-bookmark>
 </ng-template>
+
+<ng-template #noBookmarks>
+  <p class="text-center text-light">Please add a Bookmark</p>
+</ng-template>
+
+<app-new-folder [user]="user" [folderFor]="'Bookmarks'"
+                (addedFolder)="refreshBookmarks(user._id, $event.name)"></app-new-folder>

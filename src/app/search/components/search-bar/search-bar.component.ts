@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
+import {Component, EventEmitter, HostListener, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
 import {faSearch} from '@fortawesome/free-solid-svg-icons';
 import {SearchType} from '../../models/search-type.model';
 import {searchTypes} from '../../constants/constants';
@@ -22,7 +22,18 @@ export class SearchBarComponent implements OnInit {
   mainSearchQuery: string;
   secondarySearchQuery: string;
 
+  public pressedButton = '';
+
   constructor(private searchService: SearchService) {
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  public handleKeyPressEvent(event: KeyboardEvent, query: string, secondaryQuery: string) {
+    event.stopPropagation();
+    this.pressedButton = event.key;
+    if (this.pressedButton === 'Enter' && query) {
+      this.search(query, secondaryQuery);
+    }
   }
 
   ngOnInit() {
@@ -48,7 +59,6 @@ export class SearchBarComponent implements OnInit {
       }
     }
     window.open(this.currentSearch.url, '_blank');
-
   }
 
   close() {

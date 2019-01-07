@@ -6,6 +6,7 @@ export class Task {
   description?: string;
   dueDate?: Date;
   complete: boolean;
+  folder: string;
 
   constructor(options: any) {
     this.userId = options && options.userId;
@@ -14,5 +15,6 @@ export class Task {
     this.description = options && options.description;
     this.dueDate = options && options.dueDate;
     this.sid = options && options.sid;
+    this.folder = options && options.folder;
   }
 }

@@ -31,13 +31,16 @@ export class MessagesComponent implements OnInit {
     this.subscription = this.messageService.currentMessage.subscribe(currentMessage => {
       if (currentMessage && currentMessage.toDisplay) {
         if (currentMessage.error) {
+          console.log('currentMessage', currentMessage);
           // If there is a message and it's an error. Create error object and open snackbar with error.
           this.currentMessage = SharedService.switchErrorText(
             currentMessage.message,
             currentMessage.origin,
             currentMessage.operationType
           );
-          this.openSnackBar();
+          if (this.currentMessage.error && this.currentMessage.text) {
+            this.openSnackBar();
+          }
         } else {
           // If there is a message and it is not an error. Open snackbar with success message.
           this.currentMessage = {

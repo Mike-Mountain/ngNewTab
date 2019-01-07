@@ -1,20 +1,23 @@
 <section class="todo">
-  <div class="disabled-overlay"
-       *ngIf="sharedService.currentApp !== 'ToDo'"
-       (mouseenter)="sharedService.currentApp = 'ToDo'"
-  ></div>
-  <!--<mat-toolbar class="notes-toolbar">-->
-  <!--<button mat-button [matMenuTriggerFor]="menu" class="text-light">Tasks</button>-->
-  <!--<button mat-mini-fab color="primary" class="add-new" (click)="openTasksModal()">-->
-  <!--<mat-icon>add</mat-icon>-->
-  <!--</button>-->
-  <!--<mat-menu #menu="matMenu"></mat-menu>-->
-  <!--</mat-toolbar>-->
   <div class="todo-list">
     <div class="todo-list-header">
       <div class="folders">
-        <button mat-button [matMenuTriggerFor]="menu" class="text-light">Task Folder Name</button>
-        <mat-menu #menu="matMenu"></mat-menu>
+        <button mat-button [matMenuTriggerFor]="menu" class="text-light">{{currentFolder && currentFolder.name}}</button>
+        <mat-menu #menu="matMenu">
+          <ng-container *ngFor="let folder of folders">
+            <button mat-menu-item (click)="getAllTasks(user._id, folder.name, folder)" class="folder-button">
+              {{folder.name}}
+              <button mat-mini-fab class="delete-folder" (click)="deleteCurrentFolder(currentFolder._id, user._id, currentFolder.name)">
+                <mat-icon class="mr-0">delete</mat-icon>
+              </button>
+            </button>
+          </ng-container>
+          <div class="actions">
+            <button mat-menu-item class="text-center" (click)="openNewFolderModal()" matTooltip="Add a new Folder">
+              <mat-icon class="mr-0">add</mat-icon>
+            </button>
+          </div>
+        </mat-menu>
       </div>
       <h2 class="folder-title">To Do</h2>
       <div class="new-task-button">
@@ -55,9 +58,12 @@
 
 <ng-template #taskDetail>
   <app-task-detail [selectedTask]="selectedTask" [dialogRef]="taskDetailRef"
-                   (taskDeleted)="rePopulateTasksList()"></app-task-detail>
+                   (taskDeleted)="rePopulateTasksList('Personal')"></app-task-detail>
 </ng-template>
 
 <ng-template #taskForm>
-  <app-new-task [tasksModalRef]="newTaskModalRef" [user]="user" (taskAdded)="rePopulateTasksList()"></app-new-task>
+  <app-new-task [tasksModalRef]="newTaskModalRef" [user]="user" [folders]="folders" [currentFolder]="currentFolder" (taskAdded)="rePopulateTasksList($event.folder)"></app-new-task>
 </ng-template>
+
+<app-new-folder [user]="user" [folderFor]="'Tasks'"
+                (addedFolder)="rePopulateTasksList($event.name)"></app-new-folder>

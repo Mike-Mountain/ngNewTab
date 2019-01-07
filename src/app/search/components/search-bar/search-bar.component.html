@@ -5,7 +5,8 @@
     </a>
     <div class="w-50 d-flex flex-column align-items-center">
       <mat-form-field class="search-main">
-        <input matInput type="text" id="search" name="search" placeholder="Search" class="search-input" [(ngModel)]="mainSearchQuery">
+        <input matInput type="text" id="search" name="search" placeholder="Search" class="search-input"
+               [(ngModel)]="mainSearchQuery" (keypress)="handleKeyPressEvent($event, mainSearchQuery, secondarySearchQuery)">
         <mat-menu #menu="matMenu">
           <ng-container *ngFor="let type of searchTypes">
             <a mat-menu-item class="icon" (click)="changeSearchType(type)">
@@ -17,7 +18,7 @@
       <ng-container *ngIf="currentSearch.name === 'Reddit'">
         <mat-form-field class="search-secondary">
           <input matInput type="text" id="reddit-search" name="reddit-search" placeholder="/r/"
-                 class="reddit-search-input" [(ngModel)]="secondarySearchQuery">
+                 class="reddit-search-input" [(ngModel)]="secondarySearchQuery" (keypress)="handleKeyPressEvent($event, mainSearchQuery, secondarySearchQuery)">
         </mat-form-field>
       </ng-container>
     </div>

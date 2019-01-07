@@ -4,6 +4,9 @@ import {BehaviorSubject, Observable, of} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError, tap} from 'rxjs/operators';
 import {MessageService} from '../../shared/services/message.service';
+import {SharedService} from '../../shared/services/shared.service';
+import {FolderService} from '../../shared/services/folder.service';
+import {Folder} from '../../shared/models/folder.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +18,46 @@ export class TasksService {
 
   sid_int: number;
 
+  foldersUrl = 'http://localhost:3000/folders';
   todoUrl = 'http://localhost:3000/todos';
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
 
   constructor(private http: HttpClient,
-              private messageService: MessageService) {
+              private sharedService: SharedService,
+              private messageService: MessageService,
+              private folderService: FolderService) {
+  }
+
+  getTaskFolders(userId: string, folderFor: string): Observable<Folder[]> {
+    const url = `${this.foldersUrl}/type/${folderFor}/user/${userId}`;
+    const http$ = this.http.get<Folder[]>(url, this.httpOptions);
+    return http$.pipe(
+      tap(() => {
+        const message = 'Successfully fetched';
+        this.messageService.addMessage(userId, message, false, false, 'Folders', 'GET');
+      }),
+      catchError(err => {
+        this.messageService.addError(userId, err, 'Folders', 'GET');
+        return of([]);
+      })
+    );
+  }
+
+  findTasksByFolder(userId: string, folderName: string): Observable<Task[]> {
+    const url = `${this.todoUrl}/folder/${folderName}/user/${userId}`;
+    const http$ = this.http.get<Task[]>(url, this.httpOptions);
+    return http$.pipe(
+      tap(() => {
+        const message = 'Successfully fetched';
+        this.messageService.addMessage(userId, message, false, false, 'Tasks', 'GET');
+      }),
+      catchError(err => {
+        this.messageService.addError(userId, err, 'Tasks', 'GET');
+        return of([]);
+      })
+    );
   }
 
   findTasksByUser(userId: string): Observable<Task[]> {
@@ -98,6 +134,7 @@ export class TasksService {
   }
 
   completeTask(task: Task, status: string): Observable<Task> {
+    console.log('status:', status);
     status === 'complete' ? task.complete = true : task.complete = false;
     return this.updateTask(task._id, task);
   }
@@ -106,7 +143,8 @@ export class TasksService {
     const url = `${this.todoUrl}/${id}`;
     const http$ = this.http.patch<Task>(url, task);
     return http$.pipe(
-      tap(() => {
+      tap((update: Task) => {
+        console.log('Updated:', update);
         const message = 'Successfully Updated';
         this.messageService.addMessage(task.userId, message, false, true, 'Task', 'PATCH');
       }),
