@@ -84,16 +84,18 @@ export class TodoListComponent implements OnInit, OnDestroy {
     }
   }
 
-  rePopulateTasksList(folderName: string) {
+  rePopulateTasksList(folderName: string, folder?: Folder) {
+    const name: string = folderName || folder.name;
     this.getTaskFolders(this.user._id, 'Tasks');
-    this.getAllTasks(this.user._id, folderName);
+    this.getAllTasks(this.user._id, name);
   }
 
   getTaskFolders(userId: string, folderFor: string) {
     this.getTasksFoldersSubscription = this.tasksService.getTaskFolders(userId, folderFor).subscribe(folders => {
       this.folders = folders;
-      this.currentFolder = this.folders[0];
-      console.log(this.folders);
+      // if (!this.currentFolder) {
+      //   this.currentFolder = this.folders[0];
+      // }
     });
   }
 
@@ -102,6 +104,8 @@ export class TodoListComponent implements OnInit, OnDestroy {
       this.tasks = tasks;
       if (folder) {
         this.currentFolder = folder;
+      } else {
+        this.currentFolder = this.folders[0];
       }
     });
   }
@@ -130,12 +134,13 @@ export class TodoListComponent implements OnInit, OnDestroy {
 
   deleteTask(task: Task, folderName: string) {
     this.deleteTaskSubscription = this.tasksService.deleteTask(task._id, task.userId).subscribe(() => {
-      this.getAllTasks(this.user._id, folderName);
+      this.rePopulateTasksList(folderName);
     });
   }
 
-  deleteCurrentFolder(folderId: string, userId: string, folderName: string) {
+  deleteSelectedFolder(folderId: string, userId: string) {
     this.deleteFolderSubscription = this.folderService.deleteFolder(folderId, userId).subscribe(() => {
+      const folderName = this.folders[0].name;
       this.rePopulateTasksList(folderName);
     });
   }

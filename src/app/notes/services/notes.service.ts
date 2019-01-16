@@ -5,6 +5,8 @@ import {SharedService} from '../../shared/services/shared.service';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {catchError, tap} from 'rxjs/operators';
 import {MessageService} from '../../shared/services/message.service';
+import {Folder} from '../../shared/models/folder.model';
+import {Task} from '../../todo/models/task.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +15,11 @@ export class NotesService {
 
   notes: Observable<Note[]>;
 
+  foldersUrl = 'http://localhost:3000/folders';
   notesUrl = 'http://localhost:3000/notes';
   httpOptions = {
-    headers: new HttpHeaders({'Content-Type': 'application/json'})
+    headers: new HttpHeaders({'Content-Type': 'application/json'}),
+    param: new HttpParams()
   };
 
   selectedNoteSrc = new BehaviorSubject<Note>(null);
@@ -32,6 +36,36 @@ export class NotesService {
   constructor(private sharedService: SharedService,
               private messageService: MessageService,
               private http: HttpClient) {
+  }
+
+  getNotesFolders(userId: string, folderFor: string): Observable<Folder[]> {
+    const url = `${this.foldersUrl}/type/${folderFor}/user/${userId}`;
+    const http$ = this.http.get<Folder[]>(url, this.httpOptions);
+    return http$.pipe(
+      tap(() => {
+        const message = 'Successfully fetched';
+        this.messageService.addMessage(userId, message, false, false, 'Folders', 'GET');
+      }),
+      catchError(err => {
+        this.messageService.addError(userId, err, 'Folders', 'GET');
+        return of([]);
+      })
+    );
+  }
+
+  findNotesByFolder(userId: string, folderName: string): Observable<Note[]> {
+    const url = `${this.notesUrl}/folder/${folderName}/user/${userId}`;
+    const http$ = this.http.get<Note[]>(url, this.httpOptions);
+    return http$.pipe(
+      tap(() => {
+        const message = 'Successfully fetched';
+        this.messageService.addMessage(userId, message, false, false, 'Tasks', 'GET');
+      }),
+      catchError(err => {
+        this.messageService.addError(userId, err, 'Tasks', 'GET');
+        return of([]);
+      })
+    );
   }
 
   findNotesByUser(userId: string): Observable<Note[]> {

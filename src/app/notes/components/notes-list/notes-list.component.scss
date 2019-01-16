@@ -90,6 +90,32 @@
   margin: 0 auto;
 }
 
+.folder-button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-folder {
+  width: 25px;
+  height: 25px;
+  line-height: 14px;
+  font-size: 14px;
+  margin-left: 1rem;
+
+  &::ng-deep .mat-button-wrapper{
+    line-height: 16px;
+    padding: 0;
+
+    .mat-icon {
+      font-size: 18px;
+      padding-right: .01rem;
+      padding-top: 3px;
+    }
+  }
+}
+
 .note-view {
   width: 74%;
   height: 100%;

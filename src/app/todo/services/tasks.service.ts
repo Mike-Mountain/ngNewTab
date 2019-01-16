@@ -155,9 +155,9 @@ export class TasksService {
     );
   }
 
-  deleteTask(id: string, userId: string): Observable<string> {
+  deleteTask(id: string, userId: string): Observable<any> {
     const url = `${this.todoUrl}/${id}`;
-    const http$ = this.http.delete<string>(url);
+    const http$ = this.http.delete<any>(url);
     return http$.pipe(
       tap(() => {
         const message = 'Successfully Deleted';

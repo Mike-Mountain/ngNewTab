@@ -2,12 +2,12 @@
   <div class="todo-list">
     <div class="todo-list-header">
       <div class="folders">
-        <button mat-button [matMenuTriggerFor]="menu" class="text-light">{{currentFolder && currentFolder.name}}</button>
+        <button mat-button [matMenuTriggerFor]="menu" class="text-light">{{currentFolder && currentFolder.name || 'Folders'}}</button>
         <mat-menu #menu="matMenu">
           <ng-container *ngFor="let folder of folders">
             <button mat-menu-item (click)="getAllTasks(user._id, folder.name, folder)" class="folder-button">
               {{folder.name}}
-              <button mat-mini-fab class="delete-folder" (click)="deleteCurrentFolder(currentFolder._id, user._id, currentFolder.name)">
+              <button mat-mini-fab class="delete-folder" (click)="deleteSelectedFolder(folder._id, user._id)">
                 <mat-icon class="mr-0">delete</mat-icon>
               </button>
             </button>
@@ -66,4 +66,4 @@
 </ng-template>
 
 <app-new-folder [user]="user" [folderFor]="'Tasks'"
-                (addedFolder)="rePopulateTasksList($event.name)"></app-new-folder>
+                (addedFolder)="rePopulateTasksList($event.name, $event)"></app-new-folder>

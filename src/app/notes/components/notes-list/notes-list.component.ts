@@ -6,6 +6,8 @@ import {FormControl} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {AuthService} from '../../../users/services/auth.service';
 import {User} from '../../../users/models/user.model';
+import {Folder} from '../../../shared/models/folder.model';
+import {FolderService} from '../../../shared/services/folder.service';
 
 @Component({
   selector: 'app-notes-list',
@@ -16,12 +18,16 @@ export class NotesListComponent implements OnInit, OnDestroy {
 
   notes: Note[];
   selectedNote: Note;
+  folders: Folder[];
+  currentFolder: Folder;
 
+  getNotesFoldersSubscription: Subscription;
   getAllNotesSubscription: Subscription;
   addNoteSubscription: Subscription;
   newNoteSubscription: Subscription;
   selectedNoteSubscription: Subscription;
   userSubscription: Subscription;
+  deleteFolderSubscription: Subscription;
 
   user: User;
 
@@ -30,17 +36,22 @@ export class NotesListComponent implements OnInit, OnDestroy {
   constructor(public sharedService: SharedService,
               public notesService: NotesService,
               public authService: AuthService,
-              private ar: ApplicationRef) {
+              private folderService: FolderService) {
   }
 
   ngOnInit() {
     this.userSubscription = this.authService.fireBaseUser.subscribe(user => {
       this.user = user;
-      this.getAllNotes(this.user && this.user._id);
-    });
-
-    this.addNoteSubscription = this.notesService.noteAdded.subscribe(() => {
-      this.getAllNotes(this.user && this.user._id);
+      this.getNotesFoldersSubscription = this.notesService.getNotesFolders(user._id, 'Notes').subscribe(folders => {
+        this.folders = folders;
+        this.currentFolder = folders[0];
+        this.getAllNotesSubscription = this.notesService.findNotesByFolder(user._id, this.currentFolder.name).subscribe(notes => {
+          this.notes = notes;
+          this.addNoteSubscription = this.notesService.noteAdded.subscribe(() => {
+            this.rePopulateNotesList(this.currentFolder.name);
+          });
+        });
+      });
     });
 
     this.selectedNoteSubscription = this.notesService.selectedNoteFromService.subscribe(note => {
@@ -50,6 +61,7 @@ export class NotesListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
+    this.getNotesFoldersSubscription.unsubscribe();
     this.getAllNotesSubscription.unsubscribe();
     this.addNoteSubscription.unsubscribe();
 
@@ -61,14 +73,31 @@ export class NotesListComponent implements OnInit, OnDestroy {
     }
   }
 
-  getAllNotes(userId: string) {
-    this.getAllNotesSubscription = this.notesService.findNotesByUser(userId).subscribe(notes => {
+  rePopulateNotesList(folderName: string, folder?: Folder) {
+    const name: string = folderName || folder.name;
+    this.getNotesFolders(this.user._id, 'Notes');
+    this.getAllNotes(this.user._id, name);
+  }
+
+  getNotesFolders(userId: string, folderFor: string) {
+    this.getNotesFoldersSubscription = this.notesService.getNotesFolders(userId, folderFor).subscribe(folders => {
+      this.folders = folders;
+    });
+  }
+
+  getAllNotes(userId: string, folderName: string, folder?: Folder) {
+    this.getAllNotesSubscription = this.notesService.findNotesByFolder(userId, folderName).subscribe(notes => {
       this.notes = notes;
+      if (folder) {
+        this.currentFolder = folder;
+      } else {
+        this.currentFolder = this.folders[0];
+      }
     });
   }
 
   addNewNote() {
-    const note = new Note({userId: this.user._id});
+    const note = new Note({userId: this.user._id, folder: this.currentFolder.name});
     this.isNewNote = true;
 
     this.newNoteSubscription = this.notesService.addNote(note).subscribe(newNote => {
@@ -78,21 +107,32 @@ export class NotesListComponent implements OnInit, OnDestroy {
     });
   }
 
+  openNewFolderModal() {
+    this.folderService.openNewNoteFolderModal();
+  }
+
   selectNote(note: Note) {
     this.notesService.selectNote(note);
   }
 
   updateNoteStatus() {
-    this.getAllNotes(this.user && this.user._id);
+    this.rePopulateNotesList(this.currentFolder.name);
     this.isNewNote = false;
     this.notesService.isEditableSrc.next(false);
+  }
+
+  deleteSelectedFolder(folderId: string, userId: string) {
+    this.deleteFolderSubscription = this.folderService.deleteFolder(folderId, userId).subscribe(() => {
+      const folderName = this.folders[0].name;
+      this.rePopulateNotesList(folderName);
+    });
   }
 
   deleteAll() {
     this.notes.forEach(note => {
       this.notesService.deleteNote(note._id, note.userId).subscribe(message => {
         console.log(`${message} deleted`);
-        this.getAllNotes(this.user && this.user._id);
+        this.rePopulateNotesList(this.currentFolder.name);
       });
     });
   }

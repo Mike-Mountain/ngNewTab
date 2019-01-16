@@ -3,25 +3,25 @@
        *ngIf="sharedService.currentApp !== 'Notes'"
        (mouseenter)="sharedService.currentApp = 'Notes'"
   ></div>
-  <!--<mat-toolbar class="w-101 notes-toolbar">-->
-  <!--<button mat-button [matMenuTriggerFor]="menu" class="text-light">Notes</button>-->
-  <!--&lt;!&ndash;<button mat-button class="text-light" (click)="deleteAll()">Delete All</button>&ndash;&gt;-->
-  <!--<button mat-mini-fab color="primary" class="add-new" (click)="addNewNote()">-->
-  <!--<mat-icon>add</mat-icon>-->
-  <!--</button>-->
-  <!--<mat-menu #menu="matMenu">-->
-  <!--<ng-container *ngIf="notes && notes.length">-->
-  <!--<ng-container *ngFor="let note of notes">-->
-  <!--<button mat-menu-item (click)="selectNote(note)">{{note.title}}</button>-->
-  <!--</ng-container>-->
-  <!--</ng-container>-->
-  <!--</mat-menu>-->
-  <!--</mat-toolbar>-->
   <div class="notes-container">
     <div class="notes-header">
       <div class="folders">
-        <button mat-button [matMenuTriggerFor]="menu" class="text-light">Task Folder Name</button>
-        <mat-menu #menu="matMenu"></mat-menu>
+        <button mat-button [matMenuTriggerFor]="menu" class="text-light">{{currentFolder && currentFolder.name || 'Folders'}}</button>
+        <mat-menu #menu="matMenu">
+          <ng-container *ngFor="let folder of folders">
+            <button mat-menu-item (click)="getAllNotes(user._id, folder.name, folder)" class="folder-button">
+              {{folder.name}}
+              <button mat-mini-fab class="delete-folder" (click)="deleteSelectedFolder(folder._id, user._id)">
+                <mat-icon class="mr-0">delete</mat-icon>
+              </button>
+            </button>
+          </ng-container>
+          <div class="actions">
+            <button mat-menu-item class="text-center" (click)="openNewFolderModal()" matTooltip="Add a new Folder">
+              <mat-icon class="mr-0">add</mat-icon>
+            </button>
+          </div>
+        </mat-menu>
       </div>
       <h2 class="folder-title">Notes</h2>
       <div class="new-note-button">
@@ -33,7 +33,7 @@
     <hr class="notes-line">
     <div class="note-widget">
       <figure class="box folder-nav">
-        <h5 class="text-light">Note Folder Name</h5>
+        <h5 class="text-light">{{currentFolder && currentFolder.name}}</h5>
         <hr class="folder-line">
         <div class="saved-notes">
           <ng-container *ngFor="let note of notes">
@@ -68,3 +68,7 @@
     <p class="text-light">Please add a new note or choose a note above to get started</p>
   </div>
 </ng-template>
+
+<app-new-folder [user]="user" [folderFor]="'Notes'"
+                (addedFolder)="rePopulateNotesList($event.name, $event)">
+</app-new-folder>
